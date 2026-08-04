@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "russian_survival",
+  "version": "${version}",
+  "name": "Russian Survival",
+  "description": "A harsh, funny, vanilla-friendly winter survival challenge.",
+  "authors": ["AnatolyOnHardMode"],
+  "contact": { "sources": "https://github.com/AnatolyOnHardMode/russian-survival" },
+  "license": "MIT",
+  "icon": "assets/russian_survival/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.anatolyonhardmode.russiansurvival.RussianSurvival"],
+    "client": ["com.anatolyonhardmode.russiansurvival.client.RussianSurvivalClient"]
+  },
+  "mixins": ["russian_survival.mixins.json", {"config":"russian_survival.client.mixins.json","environment":"client"}],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

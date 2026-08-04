@@ -1,0 +1,1 @@
+{"parent":"russian_survival:liquid_courage","display":{"icon":{"id":"minecraft:glass_bottle"},"title":{"translate":"advancements.russian_survival.bad.title"},"description":{"translate":"advancements.russian_survival.bad.description"},"frame":"challenge","show_toast":true,"announce_to_chat":true,"hidden":false},"criteria":{"intoxication_3":{"trigger":"minecraft:impossible"}}}

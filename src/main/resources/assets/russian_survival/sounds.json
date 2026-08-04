@@ -1,0 +1,17 @@
+{
+  "ambient.wind_1":{"sounds":["russian_survival:ambient/wind_1"],"subtitle":"subtitles.russian_survival.wind"},
+  "ambient.wind_2":{"sounds":["russian_survival:ambient/wind_2"],"subtitle":"subtitles.russian_survival.wind"},
+  "player.teeth_1":{"sounds":["russian_survival:player/teeth_1"],"subtitle":"subtitles.russian_survival.teeth"},
+  "player.teeth_2":{"sounds":["russian_survival:player/teeth_2"],"subtitle":"subtitles.russian_survival.teeth"},
+  "player.cold_breath":{"sounds":["russian_survival:player/cold_breath"],"subtitle":"subtitles.russian_survival.breath"},
+  "entity.polar_bear.warning":{"sounds":["russian_survival:entity/bear_warning"],"subtitle":"subtitles.russian_survival.bear_warning"},
+  "entity.polar_bear.snow_step":{"sounds":["russian_survival:entity/bear_step"],"subtitle":"subtitles.russian_survival.bear_step"},
+  "item.vodka.open":{"sounds":["russian_survival:item/vodka_open"],"subtitle":"subtitles.russian_survival.vodka_open"},
+  "item.vodka.drink":{"sounds":["russian_survival:item/vodka_drink"],"subtitle":"subtitles.russian_survival.vodka_drink"},
+  "effect.drunk_sting":{"sounds":["russian_survival:effect/drunk_sting"],"subtitle":"subtitles.russian_survival.drunk_sting"},
+  "item.vodka.clink":{"sounds":["russian_survival:item/bottle_clink"],"subtitle":"subtitles.russian_survival.clink"},
+  "block.samovar.boil":{"sounds":["russian_survival:block/samovar_boil"],"subtitle":"subtitles.russian_survival.samovar"},
+  "block.samovar.whistle":{"sounds":["russian_survival:block/samovar_whistle"],"subtitle":"subtitles.russian_survival.samovar_whistle"},
+  "ambient.inferno_1":{"sounds":["russian_survival:ambient/inferno_1"],"subtitle":"subtitles.russian_survival.inferno"},
+  "ambient.inferno_2":{"sounds":["russian_survival:ambient/inferno_2"],"subtitle":"subtitles.russian_survival.inferno"}
+}

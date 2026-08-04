@@ -1,0 +1,12 @@
+{
+  "type":"minecraft:jigsaw",
+  "biomes":"russian_survival:siberian_inferno",
+  "step":"surface_structures",
+  "spawn_overrides":{},
+  "terrain_adaptation":"beard_thin",
+  "start_pool":"russian_survival:abandoned_banya/start_pool",
+  "size":1,
+  "start_height":{"absolute":32},
+  "max_distance_from_center":80,
+  "use_expansion_hack":false
+}

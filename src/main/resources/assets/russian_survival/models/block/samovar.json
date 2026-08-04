@@ -1,0 +1,1 @@
+{"parent":"minecraft:block/cube","textures":{"down":"russian_survival:block/samovar_bottom","up":"russian_survival:block/samovar_top","north":"russian_survival:block/samovar_side","south":"russian_survival:block/samovar_side","east":"russian_survival:block/samovar_side","west":"russian_survival:block/samovar_side","particle":"russian_survival:block/samovar_side"}}

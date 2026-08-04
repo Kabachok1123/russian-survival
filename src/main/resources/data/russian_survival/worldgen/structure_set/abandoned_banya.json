@@ -1,0 +1,4 @@
+{
+  "structures":[{"structure":"russian_survival:abandoned_banya","weight":1}],
+  "placement":{"type":"minecraft:random_spread","salt":187645291,"spacing":42,"separation":30}
+}

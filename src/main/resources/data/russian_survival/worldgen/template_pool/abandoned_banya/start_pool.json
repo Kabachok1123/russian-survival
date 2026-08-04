@@ -1,0 +1,4 @@
+{
+  "fallback":"minecraft:empty",
+  "elements":[{"weight":1,"element":{"element_type":"minecraft:single_pool_element","location":"russian_survival:abandoned_banya","processors":"minecraft:empty","projection":"rigid"}}]
+}
