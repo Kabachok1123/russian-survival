@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.2 — Vanilla Obsidian Progression
+
+- Removed the Frozen Blackstone-to-Obsidian recipe. Obsidian once again requires
+  the normal Minecraft acquisition methods.
+
 ## 1.4.1 — Clearer Ushanka Icon
 
 - Replaced the undersized inventory sprite with a larger, immediately recognizable
@@ -57,7 +62,6 @@
   and converted village bells when players approach.
 - Expanded cold and resource generation across every vanilla Nether biome, with
   Crimson Forests acting as the warm route and Fire Resistance providing warmth.
-- Added an emergency Frozen Blackstone-to-Obsidian recipe for portal repair.
 - Removed the redundant custom Ender Dragon advancement; vanilla progression owns
   that milestone.
 

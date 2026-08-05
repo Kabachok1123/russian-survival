@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.4.1.jar`.
+The installable release is written to `build/libs/russian-survival-1.4.2.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.4.1.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.4.2.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -136,9 +136,9 @@ differently:
 - **Crimson Forest:** the warmest vanilla Nether biome and a natural rest stop.
 - **Siberian Inferno:** the harshest region, rich in Frozen Blackstone.
 
-Fire Resistance now also provides strong warmth in the Nether. Four Frozen
-Blackstone craft into one Obsidian, giving prepared explorers a way to repair a
-portal without removing the need to find a fortress and collect blaze rods.
+Fire Resistance now also provides strong warmth in the Nether. Frozen Blackstone
+remains a building resource and cannot be converted into Obsidian; portals still
+require the normal Minecraft progression and resource routes.
 
 Visually, the Nether is now **Hell Freezing Over**: all five vanilla Nether biomes
 receive cold blue-gray fog, drifting snowflake ambience and dense veins of Nether
@@ -181,7 +181,6 @@ and oceans freeze beneath a cold blue-gray sky.
 - **Samovar:** copper over a bucket, iron on both sides, campfire below.
 - **Bear Bell:** string over copper/iron; place it and ring it to briefly outline
   bears within 48 blocks and provoke them into chasing the player.
-- **Emergency Obsidian:** four Frozen Blackstone craft into one Obsidian.
 
 ## Configuration
 
@@ -234,7 +233,7 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.4.1 release smoke test was performed with Java 21 and included:
+The 1.4.2 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
