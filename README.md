@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.3.1.jar`.
+The installable release is written to `build/libs/russian-survival-1.3.2.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.1.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.2.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -143,6 +143,12 @@ Vanilla villages use closer spacing and can generate a compact working banya amo
 their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
 Village bells are converted into functional Bear Bells when approached.
 
+The redesigned Village Banya is a conspicuous 9×9 spruce-log cabin with a stepped
+roof, tall smoking chimney, red banner, lantern, samovar, water cauldron, campfire,
+bed and loot barrel. Its village pool weight is high, and the same building also
+generates independently across the Overworld. Use
+`/locate structure russian_survival:village_banya` to find the standalone version.
+
 Bear Shrines are rare mossy-cobblestone and birch ruins found across the Overworld.
 Each has a Bear Bell and a small supply chest. Vanilla biome IDs remain intact, so
 locate commands and biome-specific structures keep working. Their presentation is
@@ -216,7 +222,7 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.3.1 release smoke test was performed with Java 21 and included:
+The 1.3.2 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;

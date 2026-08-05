@@ -287,30 +287,40 @@ def village_banya_template():
         parts=[int_list('pos',[x,y,z]),int_tag('state',state(name,props))]
         if nbt: parts.append(compound_tag('nbt',nbt))
         blocks.append(parts)
-    for x in range(7):
-        for z in range(7): put(x,0,z,'minecraft:cobblestone')
+    for x in range(9):
+        for z in range(9): put(x,0,z,'minecraft:cobblestone' if (x+z)%4 else 'minecraft:mossy_cobblestone')
     for y in range(1,4):
-        for x in range(7):
-            for z in (0,6):
-                if not (z==0 and x==3 and y<3): put(x,y,z,'minecraft:spruce_planks')
-        for z in range(1,6):
-            for x in (0,6): put(x,y,z,'minecraft:spruce_planks')
-    for x in range(7):
-        for z in range(7): put(x,4,z,'minecraft:spruce_slab',{'type':'bottom','waterlogged':'false'})
-    for x,z in ((0,0),(6,0),(0,6),(6,6)):
+        for x in range(1,8):
+            for z in (1,7):
+                if not (z==1 and x==4 and y<3): put(x,y,z,'minecraft:spruce_planks')
+        for z in range(2,7):
+            for x in (1,7): put(x,y,z,'minecraft:spruce_planks')
+    for x,z in ((1,1),(7,1),(1,7),(7,7)):
         for y in range(1,5): put(x,y,z,'minecraft:stripped_spruce_log',{'axis':'y'})
-    put(3,1,0,'minecraft:jigsaw',{'orientation':'north_up'},[
+    stair={'half':'bottom','shape':'straight','waterlogged':'false'}
+    for z in range(9):
+        put(0,4,z,'minecraft:spruce_stairs',{**stair,'facing':'east'}); put(8,4,z,'minecraft:spruce_stairs',{**stair,'facing':'west'})
+        put(1,5,z,'minecraft:spruce_stairs',{**stair,'facing':'east'}); put(7,5,z,'minecraft:spruce_stairs',{**stair,'facing':'west'})
+        for x in range(2,7): put(x,6,z,'minecraft:spruce_slab',{'type':'bottom','waterlogged':'false'})
+    put(4,1,0,'minecraft:jigsaw',{'orientation':'north_up'},[
         string_tag('name','minecraft:house'), string_tag('target','minecraft:street'),
         string_tag('pool','minecraft:empty'), string_tag('final_state','minecraft:air'),
         string_tag('joint','rollable')])
-    put(3,1,5,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'false','waterlogged':'false'})
-    put(2,1,5,'minecraft:water_cauldron',{'level':'3'})
-    put(4,1,5,'minecraft:barrel',{'facing':'north','open':'false'},[
+    put(4,1,1,'minecraft:spruce_door',{'facing':'north','half':'lower','hinge':'left','open':'false','powered':'false'})
+    put(4,2,1,'minecraft:spruce_door',{'facing':'north','half':'upper','hinge':'left','open':'false','powered':'false'})
+    put(3,1,6,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'false','waterlogged':'false'})
+    put(2,1,6,'minecraft:water_cauldron',{'level':'3'})
+    put(5,1,6,'minecraft:barrel',{'facing':'north','open':'false'},[
         string_tag('LootTable','russian_survival:chests/abandoned_banya')])
-    put(1,1,2,'russian_survival:samovar',{'lit':'false','water':'true'})
-    put(5,1,2,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'foot'})
-    put(5,1,3,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'head'})
-    root=[int_tag('DataVersion',3955),int_list('size',[7,5,7]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
+    put(2,1,2,'russian_survival:samovar',{'lit':'false','water':'true'})
+    put(6,1,2,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'foot'})
+    put(6,1,3,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'head'})
+    put(2,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'}); put(3,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(2,4,6,'minecraft:cobblestone'); put(2,5,6,'minecraft:cobblestone'); put(2,6,6,'minecraft:hay_block',{'axis':'y'})
+    put(2,7,6,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'true','waterlogged':'false'})
+    put(2,2,1,'minecraft:red_wall_banner',{'facing':'north'})
+    put(6,2,1,'minecraft:lantern',{'hanging':'true','waterlogged':'false'})
+    root=[int_tag('DataVersion',3955),int_list('size',[9,8,9]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
     target=ROOT/'src/main/resources/data/russian_survival/structure/village/banya.nbt'; target.parent.mkdir(parents=True,exist_ok=True)
     with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
 

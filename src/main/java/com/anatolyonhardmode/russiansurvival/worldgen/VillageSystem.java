@@ -65,7 +65,7 @@ public final class VillageSystem {
                 .single(RussianSurvival.MOD_ID + ":village/banya")
                 .apply(StructureTemplatePool.Projection.RIGID);
         StructureTemplatePoolAccessor accessor = (StructureTemplatePoolAccessor) pool;
-        int weight = 3;
+        int weight = 8;
         for (int i = 0; i < weight; i++) accessor.russianSurvival$getTemplates().add(banya);
     }
 

@@ -1,0 +1,4 @@
+{
+  "structures":[{"structure":"russian_survival:village_banya","weight":1}],
+  "placement":{"type":"minecraft:random_spread","salt":73519041,"spacing":28,"separation":18}
+}

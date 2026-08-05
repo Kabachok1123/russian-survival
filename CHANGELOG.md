@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.2 — Visible Village Banya
+
+- Rebuilt the village banya as a recognizable 9×9 spruce cabin with a stepped roof,
+  tall smoking chimney, red banner, lantern and complete heated interior.
+- Increased its village house-pool weight from 3 to 8.
+- Added an independently generated Overworld version locatable as
+  `russian_survival:village_banya`.
+
 ## 1.3.1 — More Brown Bears
 
 - Increased brown-bear spawn weight, group size and nearby population cap; renamed
