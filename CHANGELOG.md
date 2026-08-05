@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.2 — Torch Shelter
+
+- Changed nearby torches from ordinary heat sources into cold stabilizers: they
+  stop environmental cold gain and recover only 0.02 cold per second.
+- Powder Snow immersion bypasses torch shelter, preserving it as a dangerous trap.
+- Campfires, open fire, furnaces and the Samovar retain their much stronger warming.
+
 ## 1.5.1 — Relentless Winter
 
 - Increased base cold gain and made Overworld snowfall continuous, with daily

@@ -111,10 +111,12 @@ public final class ColdSystem {
         if (player.isInWater()) gain *= ServerConfig.values.waterMultiplier;
         if (pos.getY() > 120) gain *= 1.0 + Math.min(0.75, (pos.getY() - 120) / 120.0);
         if (player.isSprinting()) gain *= 0.82;
-        if (touchingPowderSnow(level, pos)) gain += ServerConfig.values.powderSnowColdGainPerSecond;
+        boolean inPowderSnow = touchingPowderSnow(level, pos);
+        if (inPowderSnow) gain += ServerConfig.values.powderSnowColdGainPerSecond;
         gain *= 1.0 - insulation(player);
         if (player.hasEffect(ModEffects.DRUNK)) gain = Math.min(gain, -0.25);
         gain -= nearbyHeat(level, pos, false);
+        if (!inPowderSnow && nearbyTorch(level, pos)) gain = Math.min(gain, -0.02);
         return gain;
     }
 
@@ -146,6 +148,16 @@ public final class ColdSystem {
         return best * ServerConfig.values.heatSourceStrength;
     }
 
+    private static boolean nearbyTorch(ServerLevel level, BlockPos center) {
+        int radius = Math.max(1, Math.min(6, ServerConfig.values.heatSourceRadius));
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -2, -radius), center.offset(radius, 2, radius))) {
+            BlockState state = level.getBlockState(pos);
+            if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH)
+                    || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) return true;
+        }
+        return false;
+    }
+
     private static double heatStrength(BlockState state, boolean ignoreLava) {
         if (state.is(ModBlocks.SAMOVAR) && state.hasProperty(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT) && state.getValue(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT)) return 2.0;
         if (state.is(Blocks.LAVA)) return ignoreLava ? 0 : 1.4;
@@ -153,7 +165,7 @@ public final class ColdSystem {
         if (state.is(Blocks.CAMPFIRE)) return lit(state) ? 1.8 : 0;
         if (state.is(Blocks.SOUL_CAMPFIRE) || state.is(Blocks.SOUL_FIRE)) return lit(state) ? 1.15 : 0;
         if (state.is(Blocks.FURNACE) || state.is(Blocks.BLAST_FURNACE) || state.is(Blocks.SMOKER)) return lit(state) ? 1.2 : 0;
-        if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH) || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) return 0.65;
+        if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH) || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) return 0;
         return 0;
     }
 
