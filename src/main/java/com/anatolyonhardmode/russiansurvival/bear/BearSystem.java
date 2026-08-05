@@ -34,7 +34,7 @@ public final class BearSystem {
         LootTableEvents.MODIFY.register((key, table, source, registries) -> {
             if (source.isBuiltin() && key.equals(EntityType.POLAR_BEAR.getDefaultLootTable())) {
                 table.pool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.BEAR_FUR)
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))).build());
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))).build());
             }
         });
         ServerTickEvents.END_WORLD_TICK.register(level -> {
@@ -57,12 +57,15 @@ public final class BearSystem {
     }
 
     private static void initializeVariant(PolarBear bear) {
+        if (bear.getTags().contains("russian_survival:frostback")
+                || bear.getTags().contains("russian_survival:snowstalker")) {
+            bear.setCustomName(null);
+        }
         if (bear.getTags().contains("russian_survival:variant_ready")) return;
         bear.addTag("russian_survival:variant_ready");
         int roll = Math.floorMod(bear.getUUID().hashCode(), 20);
         if (roll == 0) {
             bear.addTag("russian_survival:frostback");
-            bear.setCustomName(net.minecraft.network.chat.Component.translatable("entity.russian_survival.frostback"));
             bear.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(42.0);
             bear.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).setBaseValue(7.0);
             bear.setHealth(42.0F);

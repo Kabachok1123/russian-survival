@@ -31,7 +31,7 @@ public final class ColdHud {
         graphics.drawString(client.font, "\u2744", x - 11, y + 4, 0xE8F9FF, true);
         Component label = Component.translatable("hud.russian_survival.cold", Math.round(cold));
         graphics.drawString(client.font, label, x, y - 2, 0xE5F7FF, true);
-        if (cold >= 40 && ClientConfig.values.coldVignetteIntensity > 0) {
+        if (cold >= 20 && ClientConfig.values.coldVignetteIntensity > 0) {
             renderVignette(graphics, width, height, cold, pulse);
         }
     }
@@ -44,22 +44,22 @@ public final class ColdHud {
     }
 
     private static void renderVignette(GuiGraphics graphics, int width, int height, float cold, boolean pulse) {
-        float severity = Math.min(1.0F, (cold - 40.0F) / 60.0F);
+        float severity = vignetteSeverity(cold);
         float configured = Math.max(0.0F, Math.min(1.5F, ClientConfig.values.coldVignetteIntensity));
-        int depth = 8 + Math.round(22 * severity);
+        int depth = 14 + Math.round(48 * severity);
         for (int i = 0; i < depth; i++) {
             float outer = 1.0F - i / (float) depth;
-            int alpha = Math.min(150, Math.round((10 + 92 * severity) * outer * outer * configured));
-            if (pulse) alpha = Math.min(175, alpha + 16);
+            int alpha = Math.min(205, Math.round((18 + 145 * severity) * outer * outer * configured));
+            if (pulse) alpha = Math.min(225, alpha + 22);
             int blue = (alpha << 24) | 0x8EDBFF;
             graphics.fill(i, i, width - i, i + 1, blue);
             graphics.fill(i, height - i - 1, width - i, height - i, blue);
             graphics.fill(i, i, i + 1, height - i, blue);
             graphics.fill(width - i - 1, i, width - i, height - i, blue);
         }
-        int cornerAlpha = Math.min(110, Math.round(70 * severity * configured));
+        int cornerAlpha = Math.min(170, Math.round((28 + 115 * severity) * configured));
         int frost = (cornerAlpha << 24) | 0xD9F5FF;
-        int corner = 5 + Math.round(12 * severity);
+        int corner = 8 + Math.round(24 * severity);
         graphics.fill(0, 0, corner, 3, frost);
         graphics.fill(0, 0, 3, corner, frost);
         graphics.fill(width - corner, 0, width, 3, frost);
@@ -68,6 +68,14 @@ public final class ColdHud {
         graphics.fill(0, height - corner, 3, height, frost);
         graphics.fill(width - corner, height - 3, width, height, frost);
         graphics.fill(width - 3, height - corner, width, height, frost);
+    }
+
+    private static float vignetteSeverity(float cold) {
+        if (cold < 20) return 0.0F;
+        if (cold < 40) return 0.10F + (cold - 20) / 20.0F * 0.20F;
+        if (cold < 60) return 0.30F + (cold - 40) / 20.0F * 0.25F;
+        if (cold < 80) return 0.55F + (cold - 60) / 20.0F * 0.23F;
+        return Math.min(1.0F, 0.78F + (cold - 80) / 20.0F * 0.22F);
     }
     private ColdHud() {}
 }

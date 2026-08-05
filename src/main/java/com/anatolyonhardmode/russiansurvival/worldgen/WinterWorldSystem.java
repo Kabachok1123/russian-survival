@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public final class WinterWorldSystem {
     private static final ResourceKey<PlacedFeature> FREEZE_TOP = mod("winter_freeze_top");
+    private static final ResourceKey<PlacedFeature> POWDER_SNOW_PATCH = mod("powder_snow_patch");
 
     public static void initialize() {
         BiomeModifications.create(ResourceLocation.fromNamespaceAndPath(RussianSurvival.MOD_ID, "winter_weather"))
@@ -50,6 +51,8 @@ public final class WinterWorldSystem {
 
         BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(),
                 GenerationStep.Decoration.TOP_LAYER_MODIFICATION, FREEZE_TOP);
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(),
+                GenerationStep.Decoration.TOP_LAYER_MODIFICATION, POWDER_SNOW_PATCH);
     }
 
     private static ResourceKey<PlacedFeature> mod(String path) {

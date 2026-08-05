@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
 
 public final class ColdSystem {
     public static void initialize() {
@@ -40,8 +41,10 @@ public final class ColdSystem {
             if (server.getTickCount() % 20 != 0) return;
             for (ServerPlayer player : server.getPlayerList().getPlayers()) tickPlayer(player);
             ServerLevel overworld = server.overworld();
-            if (overworld.getGameTime() % 24000 == 0 && overworld.random.nextDouble() < ServerConfig.values.snowChancePerDay) {
-                overworld.setWeatherParameters(0, 20 * 60 * (3 + overworld.random.nextInt(5)), true, overworld.random.nextInt(5) == 0);
+            boolean newDay = overworld.getGameTime() % 24000 < 20;
+            if (!overworld.isRaining() || newDay) {
+                boolean snowstorm = newDay && overworld.random.nextDouble() < ServerConfig.values.snowstormChancePerDay;
+                overworld.setWeatherParameters(0, 24000 * 2, true, snowstorm);
             }
         });
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
@@ -71,13 +74,17 @@ public final class ColdSystem {
             return;
         }
 
-        boolean coldBiome = isColdBiome(player);
         float cold = data.russianSurvival$getCold();
-        if (coldBiome) {
-            double change = calculateColdChange(player);
+        if (player.level().dimension() == Level.OVERWORLD) {
+            double change = calculateOverworldColdChange(player);
             cold = (float) Math.max(0, Math.min(100, cold + change));
             data.russianSurvival$setCold(cold);
-        } else if (player.level().dimension() != Level.NETHER) {
+        } else if (player.level().dimension() == Level.NETHER) {
+            double recovery = ServerConfig.values.netherColdRecoveryPerSecond
+                    + nearbyHeat(player.serverLevel(), player.blockPosition(), true);
+            if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) recovery += 0.25;
+            data.russianSurvival$setCold(cold = (float) Math.max(0, cold - recovery));
+        } else {
             data.russianSurvival$setCold(cold = Math.max(0, cold - 0.35F));
         }
 
@@ -87,42 +94,34 @@ public final class ColdSystem {
         sync(player, data);
     }
 
-    private static boolean isColdBiome(ServerPlayer player) {
-        Holder<Biome> biome = player.level().getBiome(player.blockPosition());
-        return player.level().dimension() == Level.OVERWORLD
-                || player.level().dimension() == Level.NETHER;
-    }
-
-    private static double calculateColdChange(ServerPlayer player) {
+    private static double calculateOverworldColdChange(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos pos = player.blockPosition();
         double gain = ServerConfig.values.baseColdGainPerSecond;
         Holder<Biome> biome = level.getBiome(pos);
-        if (level.dimension() == Level.NETHER) {
-            if (biome.is(Biomes.SOUL_SAND_VALLEY)) gain *= 1.45;
-            else if (biome.is(Biomes.BASALT_DELTAS)) gain *= 1.15;
-            else if (biome.is(Biomes.WARPED_FOREST)) gain *= 0.75;
-            else if (biome.is(Biomes.CRIMSON_FOREST)) gain *= 0.35;
-            else gain *= 0.95;
-            if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) gain -= 0.3;
-        } else {
-            float biomeTemperature = biome.value().getBaseTemperature();
-            if (biomeTemperature <= 0.2F) gain *= 1.35;
-            else if (biomeTemperature >= 1.5F) gain *= 0.35;
-            else if (biomeTemperature >= 0.9F) gain *= 0.7;
-        }
+        float biomeTemperature = biome.value().getBaseTemperature();
+        if (biomeTemperature <= 0.2F) gain *= 1.35;
+        else if (biomeTemperature >= 1.5F) gain *= 0.35;
+        else if (biomeTemperature >= 0.9F) gain *= 0.7;
         boolean outside = level.canSeeSky(pos.above());
         if (!outside) gain *= 0.4;
         if (pos.getY() < level.getSeaLevel() - 25) gain -= 0.38;
         if (!level.isDay() && outside) gain *= 1.35;
         if (level.isRainingAt(pos)) gain *= level.isThundering() ? ServerConfig.values.snowstormMultiplier : ServerConfig.values.snowMultiplier;
-        if (player.isInWaterOrRain()) gain *= ServerConfig.values.waterMultiplier;
+        if (player.isInWater()) gain *= ServerConfig.values.waterMultiplier;
         if (pos.getY() > 120) gain *= 1.0 + Math.min(0.75, (pos.getY() - 120) / 120.0);
         if (player.isSprinting()) gain *= 0.82;
+        if (touchingPowderSnow(level, pos)) gain += ServerConfig.values.powderSnowColdGainPerSecond;
         gain *= 1.0 - insulation(player);
         if (player.hasEffect(ModEffects.DRUNK)) gain = Math.min(gain, -0.25);
-        gain -= nearbyHeat(level, pos);
+        gain -= nearbyHeat(level, pos, false);
         return gain;
+    }
+
+    private static boolean touchingPowderSnow(ServerLevel level, BlockPos pos) {
+        return level.getBlockState(pos).is(Blocks.POWDER_SNOW)
+                || level.getBlockState(pos.above()).is(Blocks.POWDER_SNOW)
+                || level.getBlockState(pos.below()).is(Blocks.POWDER_SNOW);
     }
 
     private static double insulation(ServerPlayer player) {
@@ -134,12 +133,12 @@ public final class ColdSystem {
         return Math.min(0.82, insulation);
     }
 
-    private static double nearbyHeat(ServerLevel level, BlockPos center) {
+    private static double nearbyHeat(ServerLevel level, BlockPos center, boolean ignoreLava) {
         int radius = Math.max(1, Math.min(6, ServerConfig.values.heatSourceRadius));
         double best = 0;
         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -2, -radius), center.offset(radius, 2, radius))) {
             BlockState state = level.getBlockState(pos);
-            double strength = heatStrength(state);
+            double strength = heatStrength(state, ignoreLava);
             if (strength <= 0) continue;
             double distance = Math.sqrt(pos.distSqr(center));
             best = Math.max(best, strength * Math.max(0.15, 1.0 - distance / (radius + 1.0)));
@@ -147,13 +146,14 @@ public final class ColdSystem {
         return best * ServerConfig.values.heatSourceStrength;
     }
 
-    private static double heatStrength(BlockState state) {
-        if (state.is(ModBlocks.SAMOVAR) && state.hasProperty(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT) && state.getValue(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT)) return 1.25;
-        if (state.is(Blocks.LAVA) || state.is(Blocks.FIRE)) return 1.0;
-        if (state.is(Blocks.CAMPFIRE)) return lit(state) ? 1.0 : 0;
-        if (state.is(Blocks.SOUL_CAMPFIRE) || state.is(Blocks.SOUL_FIRE)) return lit(state) ? 0.65 : 0;
-        if (state.is(Blocks.FURNACE) || state.is(Blocks.BLAST_FURNACE) || state.is(Blocks.SMOKER)) return lit(state) ? 0.9 : 0;
-        if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH) || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) return 0.08;
+    private static double heatStrength(BlockState state, boolean ignoreLava) {
+        if (state.is(ModBlocks.SAMOVAR) && state.hasProperty(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT) && state.getValue(com.anatolyonhardmode.russiansurvival.block.SamovarBlock.LIT)) return 2.0;
+        if (state.is(Blocks.LAVA)) return ignoreLava ? 0 : 1.4;
+        if (state.is(Blocks.FIRE)) return 1.8;
+        if (state.is(Blocks.CAMPFIRE)) return lit(state) ? 1.8 : 0;
+        if (state.is(Blocks.SOUL_CAMPFIRE) || state.is(Blocks.SOUL_FIRE)) return lit(state) ? 1.15 : 0;
+        if (state.is(Blocks.FURNACE) || state.is(Blocks.BLAST_FURNACE) || state.is(Blocks.SMOKER)) return lit(state) ? 1.2 : 0;
+        if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH) || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) return 0.65;
         return 0;
     }
 
@@ -165,7 +165,10 @@ public final class ColdSystem {
         if (cold >= 60) player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, cold >= 90 ? 2 : cold >= 75 ? 1 : 0, true, false, true));
         if (cold >= 75) player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0, true, false, true));
         if (cold >= 90) player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 60, 0, true, false, true));
-        if (cold >= 100 && player.tickCount % Math.max(20, ServerConfig.values.freezeDamageIntervalTicks) == 0) player.hurt(player.damageSources().freeze(), 1.0F);
+        int damageInterval = Math.max(20, ServerConfig.values.freezeDamageIntervalTicks);
+        if (cold >= 100 && player.tickCount % damageInterval < 20) {
+            player.hurt(player.damageSources().freeze(), freezeDamage(player.level().getDifficulty()));
+        }
         if (cold >= 60 && player.getRandom().nextInt(4) == 0) {
             player.serverLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getEyeY(), player.getZ(), 2, 0.15, 0.08, 0.15, 0.01);
         }
@@ -181,7 +184,16 @@ public final class ColdSystem {
         if (coldBiomeSound(player) && player.getRandom().nextInt(35) == 0) player.playSound(player.getRandom().nextBoolean() ? ModSounds.WIND_1 : ModSounds.WIND_2, 0.28F, 0.9F + player.getRandom().nextFloat() * 0.2F);
     }
 
-    private static boolean coldBiomeSound(ServerPlayer player) { return isColdBiome(player) && player.level().canSeeSky(player.blockPosition().above()); }
+    private static boolean coldBiomeSound(ServerPlayer player) { return player.level().dimension() == Level.OVERWORLD && player.level().canSeeSky(player.blockPosition().above()); }
+
+    private static float freezeDamage(Difficulty difficulty) {
+        return switch (difficulty) {
+            case PEACEFUL -> 0.5F;
+            case EASY -> 1.0F;
+            case NORMAL -> 2.0F;
+            case HARD -> 3.0F;
+        };
+    }
 
     private static void updateIntoxication(ServerPlayer player, PlayerSurvivalData data) {
         if (player.hasEffect(ModEffects.DRUNK)) return;

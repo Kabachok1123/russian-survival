@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.5.1 — Relentless Winter
+
+- Increased base cold gain and made Overworld snowfall continuous, with daily
+  snowstorms replacing occasional snow days.
+- Made campfires and fire rapidly remove cold, while torches remove it slowly.
+- Made the Nether a recovery zone: cold never accumulates there and instead falls
+  by 0.18 per second; ambient lava is ignored while deliberate heat still helps.
+- Added two surface Powder Snow trap patches per Overworld chunk and connected
+  immersion in Powder Snow to an extra 2.8 cold per second before insulation.
+- Made the cold vignette start at 20 and scale through distinct 20/40/60/80/100
+  severity bands with stronger edges and a critical pulse.
+- Fixed critical cold damage timing and scaled two-second damage by world
+  difficulty: 0.5/1/2/3 on Peaceful/Easy/Normal/Hard.
+- Added Regeneration I for 15 seconds to Vodka.
+- Removed visible names from rare bear variants and guaranteed 1–2 Bear Fur from
+  every bear.
+
 ## 1.5.0 — Frozen Vanilla Nether and Sealed Banya
 
 - Removed the Fur Coat item, recipe, textures and insulation setting.

@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.5.0.jar`.
+The installable release is written to `build/libs/russian-survival-1.5.1.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.5.0.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.5.1.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -80,29 +80,35 @@ ordinary worlds.
 ### Cold
 
 `cold_level` ranges from 0 (warm) to 100 (critical) and persists with the player.
-It updates once per second, not every tick. Day/night, open sky, snowfall, storms,
-water, altitude, underground depth, sprinting and insulation modify gain. A bounded
+It updates once per second, not every tick. Snowfall is maintained continuously in
+the Overworld; night, open sky, storms, water, altitude, underground depth,
+sprinting, Powder Snow and insulation modify gain. A bounded
 4-block heat scan recognizes lit campfires, furnaces, smokers, blast furnaces, fire,
 lava, weak torches and a working samovar.
 
-- 40: cold vignette and occasional teeth/audio feedback
+- 20: the first visible edge frost appears
+- 40: a clearly visible cold vignette and occasional teeth/audio feedback
 - 60: Slowness I
 - 75: Slowness II and Weakness I
 - 90: Slowness III and Mining Fatigue I
-- 100: vanilla freeze damage every configured interval
+- 100: freeze damage every two seconds: 0.5/1/2/3 damage on
+  Peaceful/Easy/Normal/Hard
 
-The default calm opening reaches critical cold in about 182 seconds from the
-starting value of 20. Storm tuning yields roughly 104 seconds. Creative and
-spectator players are exempt.
+The default constant-snow opening reaches critical cold in about 96 seconds from
+the starting value of 20; a snowstorm shortens it to roughly 74 seconds. Powder
+Snow adds 2.8 cold per second before insulation and works alongside vanilla sinking
+and freezing. Campfires and fire remove cold quickly; an adjacent torch removes it
+slowly. Creative and spectator players are exempt.
 
 ### Equipment and bears
 
 Each vanilla leather armor piece provides early insulation. Ushanka provides
 substantially more but does not make water or storms harmless. Brown bears
 spawn throughout varied Overworld biomes in groups of up to three and proactively
-hunt nearby players. Rare Frostback and Snowstalker variants turn encounters into
-recordable mini-events. Their search is bounded per player and capped by config.
-Vanilla fish loot remains; an injected pool adds 0–2 Bear Fur.
+hunt nearby players. Rare stronger and faster variants create recordable
+mini-events, but no naturally spawned bear receives a visible special name. Their
+search is bounded per player and capped by config. Vanilla fish loot remains; an
+injected pool guarantees 1–2 Bear Fur.
 
 Every vanilla forest family now has an additional high-weight bear spawn pool:
 oak, flower, birch, old-growth birch, dark, taiga, snowy and old-growth taiga,
@@ -113,8 +119,8 @@ can contain two to five bears, making woodland travel visibly more dangerous.
 
 - Hot Tea removes 18 cold and grants Speed I for 15 seconds.
 - Borscht removes 25 cold, grants brief Regeneration I and returns a bowl.
-- Vodka removes 20 cold and grants 45 seconds of Resistance II, Strength II,
-  Health Boost IV and strong cold protection. It simultaneously applies Drunk,
+- Vodka removes 20 cold, grants 15 seconds of Regeneration I and 45 seconds of
+  Resistance II, Strength II, Health Boost IV and strong cold protection. It applies Drunk,
   nausea, camera drift and movement inversion/stagger. Stacking to intoxication 3
   causes Blindness and later Hangover. Bottles are returned.
 - Fill a Samovar with a water bucket, ignite it with coal/charcoal, then use a glass
@@ -125,17 +131,13 @@ can contain two to five bears, making woodland travel visibly more dangerous.
 
 There is no separate custom Nether biome. The five vanilla Nether biomes retain
 their registry IDs, terrain, fortresses, bastions and normal progression while
-receiving frozen visuals and resources. Cold is active there, so nearby heat
-sources are especially valuable.
+receiving frozen visuals and resources. Entering the Nether stops cold gain and
+slowly lowers the meter by 0.18 per second; deliberate heat sources accelerate it.
+Ambient Nether lava is ignored by the heat scan so it cannot instantly clear the meter.
 
-The entire Nether now participates in the survival loop, with each route behaving
-differently:
-
-- **Soul Sand Valley:** the fastest cold gain and Nether Permafrost deposits.
-- **Basalt Deltas:** dangerous medium-high cold and Frozen Blackstone ore.
-- **Nether Wastes:** steady cold and extra Frozen Blackstone deposits.
-- **Warped Forest:** lower cold plus Nether Permafrost, making it a useful route.
-- **Crimson Forest:** the warmest vanilla Nether biome and a natural rest stop.
+The entire Nether remains visually frozen, but all five biomes now share the same
+slow-recovery rule. Their terrain, visibility and resources still create distinct
+routes through Soul Sand Valleys, Basalt Deltas, Nether Wastes and both forests.
 
 Fire Resistance now also provides strong warmth in the Nether. Frozen Blackstone
 remains a building resource and cannot be converted into Obsidian; portals still
@@ -188,9 +190,9 @@ and oceans freeze beneath a cold blue-gray sky.
 Files are created safely on first launch and rewritten with defaults if malformed:
 
 - `config/russian_survival-server.json`: cold enable/start/gain, weather and water
-  multipliers, heat radius/strength, damage interval, armor insulation, bear spawn
-  and aggression/cap, Vodka/Drunk/Hangover durations, banya spacing and daily snow
-  chance.
+  multipliers, Powder Snow gain, Nether recovery, heat radius/strength, damage
+  interval, armor insulation, bear spawn and aggression/cap, Vodka/Drunk/Hangover
+  durations, banya spacing and daily snowstorm chance.
 - `config/russian_survival-client.json`: HUD visibility and offsets, reduced nausea,
   camera rotation toggle, input inversion toggle, vignette intensity and ambience
   volume.
@@ -229,11 +231,11 @@ Run all unit/resource/build checks:
 python tools/validate_resources.py
 ```
 
-The automated balance tests assert the 150–210 second calm opening and 90–130
-second storm opening. The resource validator parses every JSON file, resolves all
+The automated balance tests assert the 90–105 second constant-snow opening and
+70–80 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.5.0 release smoke test was performed with Java 21 and included:
+The 1.5.1 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
