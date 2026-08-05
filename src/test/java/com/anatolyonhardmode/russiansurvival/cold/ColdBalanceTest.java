@@ -4,14 +4,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 final class ColdBalanceTest {
-    @Test void calmSurfaceGivesThreeMinuteOpening() {
-        double seconds = ColdBalance.secondsToCritical(20, 0.44, 1.0);
-        assertTrue(seconds >= 150 && seconds <= 210, "calm opening was " + seconds + " seconds");
+    @Test void constantSnowCreatesAShorterOpening() {
+        double seconds = ColdBalance.secondsToCritical(20, 0.62, 1.35);
+        assertTrue(seconds >= 90 && seconds <= 105, "snowy opening was " + seconds + " seconds");
     }
 
     @Test void stormWindowStaysHarshButPlayable() {
-        double seconds = ColdBalance.secondsToCritical(20, 0.44, 1.75);
-        assertTrue(seconds >= 90 && seconds <= 130, "storm opening was " + seconds + " seconds");
+        double seconds = ColdBalance.secondsToCritical(20, 0.62, 1.75);
+        assertTrue(seconds >= 70 && seconds <= 80, "storm opening was " + seconds + " seconds");
     }
 
     @Test void coldLevelIsBounded() {

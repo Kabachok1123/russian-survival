@@ -11,7 +11,5 @@
   "effect.drunk_sting":{"sounds":["russian_survival:effect/drunk_sting"],"subtitle":"subtitles.russian_survival.drunk_sting"},
   "item.vodka.clink":{"sounds":["russian_survival:item/bottle_clink"],"subtitle":"subtitles.russian_survival.clink"},
   "block.samovar.boil":{"sounds":["russian_survival:block/samovar_boil"],"subtitle":"subtitles.russian_survival.samovar"},
-  "block.samovar.whistle":{"sounds":["russian_survival:block/samovar_whistle"],"subtitle":"subtitles.russian_survival.samovar_whistle"},
-  "ambient.inferno_1":{"sounds":["russian_survival:ambient/inferno_1"],"subtitle":"subtitles.russian_survival.inferno"},
-  "ambient.inferno_2":{"sounds":["russian_survival:ambient/inferno_2"],"subtitle":"subtitles.russian_survival.inferno"}
+  "block.samovar.whistle":{"sounds":["russian_survival:block/samovar_whistle"],"subtitle":"subtitles.russian_survival.samovar_whistle"}
 }

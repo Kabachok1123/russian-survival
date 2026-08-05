@@ -1,6 +1,6 @@
 {
   "type":"minecraft:jigsaw",
-  "biomes":"russian_survival:siberian_inferno",
+  "biomes":"#russian_survival:has_structure/abandoned_banya_nether",
   "step":"surface_structures",
   "spawn_overrides":{},
   "terrain_adaptation":"beard_thin",

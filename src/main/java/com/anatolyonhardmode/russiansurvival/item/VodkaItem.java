@@ -33,6 +33,7 @@ public final class VodkaItem extends Item {
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, positive, amp));
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, positive, amp));
             player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, positive, 3));
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 15, 0));
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, drunk, Math.min(1, intoxication - 1)));
             player.addEffect(new MobEffectInstance(ModEffects.DRUNK, drunk, intoxication - 1));
             if (intoxication == 3) player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 0));

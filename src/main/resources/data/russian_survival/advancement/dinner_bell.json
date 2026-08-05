@@ -1,0 +1,14 @@
+{
+  "parent":"russian_survival:bear_minimum",
+  "display":{
+    "icon":{"id":"russian_survival:bear_bell"},
+    "title":{"translate":"advancements.russian_survival.bell.title"},
+    "description":{"translate":"advancements.russian_survival.bell.description"},
+    "frame":"challenge",
+    "show_toast":true,
+    "announce_to_chat":true,
+    "hidden":false
+  },
+  "criteria":{"has_bell":{"trigger":"minecraft:inventory_changed","conditions":{"items":[{"items":"russian_survival:bear_bell"}]}}},
+  "rewards":{"experience":50}
+}

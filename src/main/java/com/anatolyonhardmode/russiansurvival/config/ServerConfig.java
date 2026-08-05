@@ -18,6 +18,21 @@ public final class ServerConfig {
         try {
             if (Files.exists(PATH)) values = GSON.fromJson(Files.readString(PATH), Values.class);
             if (values == null) values = new Values();
+            if (values.configVersion < 2) {
+                if (values.polarBearSpawnWeight == 22 && values.polarBearAggressionRadius == 18
+                        && values.maxPolarBearsNearPlayer == 8) {
+                    values.polarBearSpawnWeight = 38;
+                    values.polarBearAggressionRadius = 20;
+                    values.maxPolarBearsNearPlayer = 12;
+                }
+                values.configVersion = 2;
+            }
+            if (values.configVersion < 3) {
+                if (values.baseColdGainPerSecond == 0.44) values.baseColdGainPerSecond = 0.62;
+                if (values.heatSourceStrength == 1.8) values.heatSourceStrength = 2.2;
+                values.configVersion = 3;
+            }
+            if (values.configVersion < 4) values.configVersion = 4;
         } catch (Exception exception) {
             RussianSurvival.LOGGER.warn("Invalid server config; restoring safe defaults", exception);
             values = new Values();
@@ -35,28 +50,31 @@ public final class ServerConfig {
     }
 
     public static final class Values {
+        public int configVersion = 4;
         public boolean enableColdSystem = true;
         public double startingCold = 20.0;
-        public double baseColdGainPerSecond = 0.44;
-        public double snowMultiplier = 1.5;
-        public double snowstormMultiplier = 2.0;
+        public double baseColdGainPerSecond = 0.62;
+        public double snowMultiplier = 1.35;
+        public double snowstormMultiplier = 1.75;
         public double waterMultiplier = 2.5;
+        public double powderSnowColdGainPerSecond = 2.8;
+        public double netherColdRecoveryPerSecond = 0.18;
         public int heatSourceRadius = 4;
-        public double heatSourceStrength = 1.8;
+        public double heatSourceStrength = 2.2;
         public int freezeDamageIntervalTicks = 40;
         public double leatherPieceInsulation = 0.08;
         public double ushankaInsulation = 0.33;
-        public double furCoatInsulation = 0.42;
-        public int polarBearSpawnWeight = 12;
-        public int polarBearAggressionRadius = 14;
-        public int maxPolarBearsNearPlayer = 5;
+        public int polarBearSpawnWeight = 38;
+        public int polarBearAggressionRadius = 20;
+        public int maxPolarBearsNearPlayer = 12;
         public int vodkaPositiveDurationTicks = 900;
         public int vodkaPositiveAmplifier = 1;
         public int drunkDurationTicks = 900;
         public int hangoverDurationTicks = 1200;
-        public boolean enableSiberianInferno = true;
         public int abandonedBanyaSpacing = 42;
-        public double snowChancePerDay = 0.45;
+        public double snowstormChancePerDay = 0.20;
+        public double blizzardWindChancePerSecond = 0.38;
+        public double blizzardWindStrength = 0.32;
     }
 
     private ServerConfig() {}
