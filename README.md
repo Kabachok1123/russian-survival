@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.2.0.jar`.
+The installable release is written to `build/libs/russian-survival-1.3.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.2.0.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -69,9 +69,10 @@ environment.
 
 Create or open a world exactly as in vanilla Minecraft. No world preset or special
 `level-type` is required. Existing chunks remain untouched, but all newly generated
-Overworld terrain resolves to Snowy Taiga or Taiga regions. New structures appear
-in those chunks, while the survival systems work immediately in both new and
-existing ordinary worlds.
+Every Overworld biome keeps its vanilla registry ID, terrain and structures, but receives
+a winter climate, snow, frozen water and a cold regional palette. New structures
+appear in new chunks, while climate colors and snowfall also work in existing
+ordinary worlds.
 
 ## Mechanics
 
@@ -143,9 +144,11 @@ their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
 Village bells are converted into functional Bear Bells when approached.
 
 Bear Shrines are rare mossy-cobblestone and birch ruins found across the Overworld.
-Each has a Bear Bell and a small supply chest. The ordinary Overworld biome source
-is redirected to broad Snowy Taiga and Taiga regions without requiring a separate
-world type; caves, ores, structures, strongholds and vanilla progression remain.
+Each has a Bear Bell and a small supply chest. Vanilla biome IDs remain intact, so
+locate commands and biome-specific structures keep working. Their presentation is
+winterized instead: deserts become pale snow steppes, swamps become dark frozen
+marshes, jungles become dense snowy wilderness, badlands become frosted rock country,
+and oceans freeze beneath a cold blue-gray sky.
 
 ## Recipes
 
@@ -213,11 +216,11 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.2.0 release smoke test was performed with Java 21 and included:
+The 1.3.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
-- ordinary world creation with new chunks converted to Snowy Taiga and Taiga;
+- ordinary world creation with all vanilla biome IDs preserved and winterized;
 - successful locate of a vanilla stronghold (confirming progression);
 - successful locate of Siberian Inferno and Abandoned Banya;
 - successful load of Bear Shrine, birch-grove and expanded Nether worldgen data;

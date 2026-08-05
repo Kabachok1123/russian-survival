@@ -21,6 +21,7 @@ public final class ModBiomes {
     private static final ResourceKey<PlacedFeature> NETHER_PERMAFROST_PATCH = placed("nether_permafrost_patch");
 
     public static void initialize() {
+        WinterWorldSystem.initialize();
         if (ServerConfig.values.enableSiberianInferno) {
             NetherBiomes.addNetherBiome(SIBERIAN_INFERNO,
                     Climate.parameters(-0.85F, 0.65F, 0.0F, 0.0F, 0.0F, -0.25F, 0.0F));

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.0 — Winterized Biomes
+
+- Restored every vanilla Overworld biome ID so locate commands and biome-specific
+  structures remain valid.
+- Applied snow precipitation, freezing, cold water/sky/fog colors and winter foliage
+  to all 57 Overworld biomes without introducing a custom world type.
+- Added distinct palettes for frozen steppes and dark winter jungle/swamp regions,
+  preserving recognizable terrain and vegetation for more varied video scenes.
+- Added a standalone freeze-top configured feature to avoid vanilla feature-order
+  cycles when generating new chunks.
+- Smoke-tested a completely new normal world through spawn generation and server
+  startup.
+
 ## 1.2.0 — Winter World and Nether Rework
 
 - Converted every newly generated Overworld biome region to Snowy Taiga or Taiga
