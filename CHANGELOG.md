@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.1 — Clearer Ushanka Icon
+
+- Replaced the undersized inventory sprite with a larger, immediately recognizable
+  brown ushanka silhouette while preserving the worn 3D armor model unchanged.
+
 ## 1.4.0 — Hell Freezing Over
 
 - Added high-weight brown-bear spawn pools to every vanilla forest family,
