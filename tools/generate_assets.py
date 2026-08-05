@@ -90,6 +90,39 @@ def block_textures():
     save_pixel("block/samovar_bottom.png", lambda d,i: copper(d,i,bottom=True))
 
 
+def samovar_v2_textures():
+    def side(d, _):
+        palette = ["#4b2b19", "#73431e", "#9b6424", "#c68a32", "#e0ad4f", "#f1cb71"]
+        for y in range(16):
+            color = palette[min(5, max(0, int(5 - abs(7.5-y) / 2.2)))]
+            d.line((0, y, 15, y), fill=color)
+        d.rectangle((0, 0, 15, 1), fill="#4a2918")
+        d.rectangle((0, 4, 15, 5), fill="#efc463")
+        d.rectangle((0, 11, 15, 12), fill="#5c351a")
+        d.line((1, 2, 1, 14), fill="#3e2417"); d.line((14, 2, 14, 14), fill="#f3cf78")
+        d.polygon([(8,6),(11,8),(8,10),(5,8)], fill="#74321f")
+        d.rectangle((7,7,9,9), fill="#d99a38"); d.point((8,8), fill="#3e2417")
+        d.point((3,3), fill="#ffe394"); d.point((12,10), fill="#8b511e")
+    save_pixel("block/samovar_side.png", side)
+
+    def top(d, _):
+        d.rectangle((0,0,15,15), fill="#4a2918")
+        d.rectangle((1,1,14,14), fill="#a86d27")
+        d.rectangle((3,3,12,12), fill="#e2ae4d")
+        d.rectangle((5,5,10,10), fill="#6b3b1d")
+        d.rectangle((6,6,9,9), fill="#241a16")
+        d.line((2,2,13,2), fill="#f4d17e"); d.line((2,13,13,13), fill="#704019")
+    save_pixel("block/samovar_top.png", top)
+
+    def bottom(d, _):
+        d.rectangle((0,0,15,15), fill="#352219")
+        d.rectangle((2,2,13,13), fill="#6f411e")
+        d.rectangle((4,4,11,11), fill="#ad722b")
+        d.rectangle((6,6,9,9), fill="#241914")
+        for x,y in ((2,2),(13,2),(2,13),(13,13)): d.rectangle((x-1,y-1,x+1,y+1), fill="#d99a3d")
+    save_pixel("block/samovar_bottom.png", bottom)
+
+
 def armor_and_hud():
     def layer(name, color, trim):
         image = Image.new("RGBA", (64,32), (0,0,0,0)); d=ImageDraw.Draw(image)
@@ -99,6 +132,22 @@ def armor_and_hud():
     layer("ushanka_layer_1.png", "#6b4028", "#c09261")
     layer("fur_coat_layer_1.png", "#75482c", "#c89c69")
     save_pixel("gui/snowflake.png", lambda d,i: (d.line((8,1,8,14),fill="#dff8ff"),d.line((1,8,14,8),fill="#dff8ff"),d.line((3,3,13,13),fill="#94ddeb"),d.line((13,3,3,13),fill="#94ddeb")))
+
+    image = Image.new("RGBA", (64,32), "#3d2418"); d = ImageDraw.Draw(image)
+    d.rectangle((0,0,39,15), fill="#5d351f")
+    d.rectangle((1,1,38,4), fill="#75472a")
+    d.line((0,14,39,14), fill="#2b1912")
+    d.rectangle((40,0,58,4), fill="#c5955c")
+    d.rectangle((41,1,48,3), fill="#ddb77c")
+    d.polygon([(44,1),(45,2),(47,2),(46,3),(46,4),(44,3),(42,4),(43,2)], fill="#b52e2b")
+    d.rectangle((0,17,19,31), fill="#b98b59")
+    d.rectangle((2,19,17,29), fill="#654027")
+    d.rectangle((20,17,39,31), fill="#b98b59")
+    d.rectangle((22,19,37,29), fill="#654027")
+    d.rectangle((42,8,51,13), fill="#704329")
+    for x,y in ((4,2),(12,7),(25,3),(33,10),(5,18),(18,28),(25,20),(37,29),(45,9)):
+        d.point((x,y), fill="#e0b477")
+    path=TEX/"models/armor/ushanka_3d.png"; path.parent.mkdir(parents=True,exist_ok=True); image.save(path)
 
 
 def effect_and_bear_textures():
@@ -266,6 +315,40 @@ def village_banya_template():
     with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
 
 
+def bear_shrine_template():
+    palette=[]; index={}
+    def state(name,props=None):
+        key=(name,tuple(sorted((props or {}).items())))
+        if key not in index:
+            parts=[string_tag('Name',name)]
+            if props: parts.append(compound_tag('Properties',[string_tag(k,v) for k,v in sorted(props.items())]))
+            index[key]=len(palette);palette.append(parts)
+        return index[key]
+    blocks=[]
+    def put(x,y,z,name,props=None,nbt=None):
+        parts=[int_list('pos',[x,y,z]),int_tag('state',state(name,props))]
+        if nbt: parts.append(compound_tag('nbt',nbt))
+        blocks.append(parts)
+    for x in range(9):
+        for z in range(9):
+            if (x-4)**2 + (z-4)**2 <= 17:
+                put(x,0,z,'minecraft:mossy_cobblestone' if (x+z)%3 else 'minecraft:cobblestone')
+    for x,z in ((1,1),(7,1),(1,7),(7,7)):
+        put(x,1,z,'minecraft:stripped_birch_log',{'axis':'y'})
+        put(x,2,z,'minecraft:stripped_birch_log',{'axis':'y'})
+        put(x,3,z,'minecraft:carved_pumpkin',{'facing':'south'})
+    for x,z in ((4,1),(4,7),(1,4),(7,4)):
+        put(x,1,z,'minecraft:cobblestone_wall',{'east':'none','north':'none','south':'none','up':'true','waterlogged':'false','west':'none'})
+    put(4,1,4,'russian_survival:bear_bell')
+    put(4,1,6,'minecraft:chest',{'facing':'north','type':'single','waterlogged':'false'},[
+        string_tag('LootTable','russian_survival:chests/bear_shrine')])
+    put(3,1,3,'minecraft:red_candle',{'candles':'2','lit':'true','waterlogged':'false'})
+    put(5,1,3,'minecraft:red_candle',{'candles':'2','lit':'true','waterlogged':'false'})
+    root=[int_tag('DataVersion',3955),int_list('size',[9,4,9]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
+    target=ROOT/'src/main/resources/data/russian_survival/structure/bear_shrine.nbt'; target.parent.mkdir(parents=True,exist_ok=True)
+    with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
+
+
 def icon():
     source=ROOT/'tmp/imagegen/icon_alpha.png'
     target=ASSETS/'icon.png'; target.parent.mkdir(parents=True,exist_ok=True)
@@ -276,4 +359,4 @@ def icon():
 
 
 if __name__ == '__main__':
-    item_textures(); block_textures(); armor_and_hud(); effect_and_bear_textures(); audio_assets(); banya_template(); village_banya_template(); icon()
+    item_textures(); block_textures(); samovar_v2_textures(); armor_and_hud(); effect_and_bear_textures(); audio_assets(); banya_template(); village_banya_template(); bear_shrine_template(); icon()

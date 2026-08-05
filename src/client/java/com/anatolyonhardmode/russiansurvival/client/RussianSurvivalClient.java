@@ -13,6 +13,7 @@ public final class RussianSurvivalClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientConfig.load();
+        UshankaArmorRenderer.initialize();
         ClientPlayNetworking.registerGlobalReceiver(ColdSyncPayload.TYPE, (payload, context) -> {
             ClientColdState.cold = payload.cold();
             ClientColdState.intoxication = payload.intoxication();

@@ -1,1 +1,1 @@
-{ "parent":"minecraft:item/generated", "textures":{"layer0":"russian_survival:item/bear_bell"} }
+{ "parent":"russian_survival:block/bear_bell" }

@@ -1,6 +1,7 @@
 {
   "item.russian_survival.bear_fur":"Медвежий мех",
   "item.russian_survival.bear_bell":"Медвежий колокол",
+  "block.russian_survival.bear_bell":"Медвежий колокол",
   "item.russian_survival.ushanka":"Ушанка",
   "item.russian_survival.fur_coat":"Меховая шуба",
   "item.russian_survival.potato_mash":"Картофельная брага",
@@ -41,8 +42,6 @@
   "advancements.russian_survival.tea.description":"Цивилизация подана горячей.",
   "advancements.russian_survival.hell.title":"Русский ад",
   "advancements.russian_survival.hell.description":"Даже Незер умудрился замёрзнуть.",
-  "advancements.russian_survival.dragon.title":"Из России с блоками",
-  "advancements.russian_survival.dragon.description":"Minecraft пройден. Даже зима тебя не остановила.",
   "advancements.russian_survival.bell.title":"Звонок к обеду",
   "advancements.russian_survival.bell.description":"Позвони. Медведи сами принесут контент.",
   "entity.russian_survival.frostback":"Морозный хребет",

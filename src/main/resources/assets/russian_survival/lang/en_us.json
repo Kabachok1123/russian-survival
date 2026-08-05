@@ -1,6 +1,7 @@
 {
   "item.russian_survival.bear_fur":"Bear Fur",
   "item.russian_survival.bear_bell":"Bear Bell",
+  "block.russian_survival.bear_bell":"Bear Bell",
   "item.russian_survival.ushanka":"Ushanka",
   "item.russian_survival.fur_coat":"Fur Coat",
   "item.russian_survival.potato_mash":"Potato Mash",
@@ -41,8 +42,6 @@
   "advancements.russian_survival.tea.description":"Civilization, served hot.",
   "advancements.russian_survival.hell.title":"Russian Hell",
   "advancements.russian_survival.hell.description":"Somehow the Nether got colder.",
-  "advancements.russian_survival.dragon.title":"From Russia With Blocks",
-  "advancements.russian_survival.dragon.description":"You completed Minecraft. Even winter could not stop you.",
   "advancements.russian_survival.bell.title":"Dinner Bell",
   "advancements.russian_survival.bell.description":"Ring it. The bears will bring the content.",
   "entity.russian_survival.frostback":"Frostback",

@@ -95,17 +95,28 @@ public final class ColdSystem {
     private static boolean isColdBiome(ServerPlayer player) {
         Holder<Biome> biome = player.level().getBiome(player.blockPosition());
         return player.level().dimension() == Level.OVERWORLD
-                || biome.is(SIBERIAN_INFERNO);
+                || player.level().dimension() == Level.NETHER;
     }
 
     private static double calculateColdChange(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos pos = player.blockPosition();
         double gain = ServerConfig.values.baseColdGainPerSecond;
-        float biomeTemperature = level.getBiome(pos).value().getBaseTemperature();
-        if (biomeTemperature <= 0.2F) gain *= 1.35;
-        else if (biomeTemperature >= 1.5F) gain *= 0.35;
-        else if (biomeTemperature >= 0.9F) gain *= 0.7;
+        Holder<Biome> biome = level.getBiome(pos);
+        if (level.dimension() == Level.NETHER) {
+            if (biome.is(SIBERIAN_INFERNO)) gain *= 1.75;
+            else if (biome.is(Biomes.SOUL_SAND_VALLEY)) gain *= 1.45;
+            else if (biome.is(Biomes.BASALT_DELTAS)) gain *= 1.15;
+            else if (biome.is(Biomes.WARPED_FOREST)) gain *= 0.75;
+            else if (biome.is(Biomes.CRIMSON_FOREST)) gain *= 0.35;
+            else gain *= 0.95;
+            if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) gain -= 0.3;
+        } else {
+            float biomeTemperature = biome.value().getBaseTemperature();
+            if (biomeTemperature <= 0.2F) gain *= 1.35;
+            else if (biomeTemperature >= 1.5F) gain *= 0.35;
+            else if (biomeTemperature >= 0.9F) gain *= 0.7;
+        }
         boolean outside = level.canSeeSky(pos.above());
         if (!outside) gain *= 0.4;
         if (pos.getY() < level.getSeaLevel() - 25) gain -= 0.38;

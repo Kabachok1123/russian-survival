@@ -14,8 +14,7 @@ Inferno climate region alongside its vanilla biomes.
 The goal is still to complete Minecraft and defeat the Ender Dragon. Every system
 is balanced around that journey: hazards slow exploration and preparation, while
 the mod's food, gear, settlements and risky buffs can accelerate progression when
-used well. The final advancement, **From Russia With Blocks**, is awarded for
-defeating the dragon.
+used well. The mod does not duplicate vanilla's dragon advancement.
 
 ## Requirements
 
@@ -44,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.1.0.jar`.
+The installable release is written to `build/libs/russian-survival-1.2.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -61,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.1.0.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.2.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -69,9 +68,10 @@ environment.
 ## Worlds
 
 Create or open a world exactly as in vanilla Minecraft. No world preset or special
-`level-type` is required. Existing chunks remain untouched; new biome features and
-structures appear in newly generated chunks. The survival systems work immediately
-in both new and existing ordinary Overworlds.
+`level-type` is required. Existing chunks remain untouched, but all newly generated
+Overworld terrain resolves to Snowy Taiga or Taiga regions. New structures appear
+in those chunks, while the survival systems work immediately in both new and
+existing ordinary worlds.
 
 ## Mechanics
 
@@ -120,12 +120,32 @@ Siberian Inferno is a cold, blue-gray Nether biome mixed alongside the five vani
 Nether biomes. It contains Frozen Blackstone ore patches and original ambience.
 Cold is active there but nearby Nether heat sources are especially valuable.
 
+The entire Nether now participates in the survival loop, with each route behaving
+differently:
+
+- **Soul Sand Valley:** the fastest cold gain and Nether Permafrost deposits.
+- **Basalt Deltas:** dangerous medium-high cold and Frozen Blackstone ore.
+- **Nether Wastes:** steady cold and extra Frozen Blackstone deposits.
+- **Warped Forest:** lower cold plus Nether Permafrost, making it a useful route.
+- **Crimson Forest:** the warmest vanilla Nether biome and a natural rest stop.
+- **Siberian Inferno:** the harshest region, rich in Frozen Blackstone.
+
+Fire Resistance now also provides strong warmth in the Nether. Four Frozen
+Blackstone craft into one Obsidian, giving prepared explorers a way to repair a
+portal without removing the need to find a fortress and collect blaze rods.
+
 Abandoned Banya is a rare 7×7 jigsaw structure with a campfire, cauldron, samovar
 and a loot barrel. Its random-spread spacing is 42 chunks by default. Loot is kept
 modest: potatoes, fuel, ingredients, metal, rare tea and very rare Vodka.
 
 Vanilla villages use closer spacing and can generate a compact working banya among
 their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
+Village bells are converted into functional Bear Bells when approached.
+
+Bear Shrines are rare mossy-cobblestone and birch ruins found across the Overworld.
+Each has a Bear Bell and a small supply chest. The ordinary Overworld biome source
+is redirected to broad Snowy Taiga and Taiga regions without requiring a separate
+world type; caves, ores, structures, strongholds and vanilla progression remain.
 
 ## Recipes
 
@@ -138,8 +158,9 @@ their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
   the immersive alternative.
 - **Borscht:** bowl + 2 beetroot + cooked beef + baked potato, shapeless.
 - **Samovar:** copper over a bucket, iron on both sides, campfire below.
-- **Bear Bell:** string over copper/iron; rings across 48 blocks, briefly outlines
-  nearby bears and provokes them into chasing the player. Designed for risky videos.
+- **Bear Bell:** string over copper/iron; place it and ring it to briefly outline
+  bears within 48 blocks and provoke them into chasing the player.
+- **Emergency Obsidian:** four Frozen Blackstone craft into one Obsidian.
 
 ## Configuration
 
@@ -170,6 +191,7 @@ Commands require permission level 2 and are not part of survival progression:
 /give @s russian_survival:bear_bell
 /locate biome russian_survival:siberian_inferno
 /locate structure russian_survival:abandoned_banya
+/locate structure russian_survival:bear_shrine
 /weather rain 600
 /summon minecraft:polar_bear ~ ~ ~
 /russiansurvival reload_config
@@ -191,13 +213,14 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.1.0 release smoke test was performed with Java 21 and included:
+The 1.2.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
-- ordinary vanilla world generation with the survival systems active;
+- ordinary world creation with new chunks converted to Snowy Taiga and Taiga;
 - successful locate of a vanilla stronghold (confirming progression);
 - successful locate of Siberian Inferno and Abandoned Banya;
+- successful load of Bear Shrine, birch-grove and expanded Nether worldgen data;
 - graceful save of Overworld, Nether and End.
 
 ## Known limitations
