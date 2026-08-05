@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 — More Brown Bears
+
+- Increased brown-bear spawn weight, group size and nearby population cap; renamed
+  the vanilla-compatible entity to Brown Bear in English and Бурый медведь in Russian.
+- Added a conservative config migration for installations still using the 1.3.0
+  bear defaults.
+
 ## 1.3.0 — Winterized Biomes
 
 - Restored every vanilla Overworld biome ID so locate commands and biome-specific

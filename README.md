@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.3.0.jar`.
+The installable release is written to `build/libs/russian-survival-1.3.1.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.0.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.1.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -216,7 +216,7 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.3.0 release smoke test was performed with Java 21 and included:
+The 1.3.1 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;

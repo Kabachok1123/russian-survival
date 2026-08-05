@@ -22,7 +22,7 @@ import net.minecraft.world.phys.AABB;
 public final class BearSystem {
     public static void initialize() {
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
-                MobCategory.CREATURE, EntityType.POLAR_BEAR, ServerConfig.values.polarBearSpawnWeight, 1, 3);
+                MobCategory.CREATURE, EntityType.POLAR_BEAR, ServerConfig.values.polarBearSpawnWeight, 2, 4);
         LootTableEvents.MODIFY.register((key, table, source, registries) -> {
             if (source.isBuiltin() && key.equals(EntityType.POLAR_BEAR.getDefaultLootTable())) {
                 table.pool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.BEAR_FUR)

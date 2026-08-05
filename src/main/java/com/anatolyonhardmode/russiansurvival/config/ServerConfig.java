@@ -18,6 +18,15 @@ public final class ServerConfig {
         try {
             if (Files.exists(PATH)) values = GSON.fromJson(Files.readString(PATH), Values.class);
             if (values == null) values = new Values();
+            if (values.configVersion < 2) {
+                if (values.polarBearSpawnWeight == 22 && values.polarBearAggressionRadius == 18
+                        && values.maxPolarBearsNearPlayer == 8) {
+                    values.polarBearSpawnWeight = 38;
+                    values.polarBearAggressionRadius = 20;
+                    values.maxPolarBearsNearPlayer = 12;
+                }
+                values.configVersion = 2;
+            }
         } catch (Exception exception) {
             RussianSurvival.LOGGER.warn("Invalid server config; restoring safe defaults", exception);
             values = new Values();
@@ -35,6 +44,7 @@ public final class ServerConfig {
     }
 
     public static final class Values {
+        public int configVersion = 2;
         public boolean enableColdSystem = true;
         public double startingCold = 20.0;
         public double baseColdGainPerSecond = 0.44;
@@ -47,9 +57,9 @@ public final class ServerConfig {
         public double leatherPieceInsulation = 0.08;
         public double ushankaInsulation = 0.33;
         public double furCoatInsulation = 0.42;
-        public int polarBearSpawnWeight = 22;
-        public int polarBearAggressionRadius = 18;
-        public int maxPolarBearsNearPlayer = 8;
+        public int polarBearSpawnWeight = 38;
+        public int polarBearAggressionRadius = 20;
+        public int maxPolarBearsNearPlayer = 12;
         public int vodkaPositiveDurationTicks = 900;
         public int vodkaPositiveAmplifier = 1;
         public int drunkDurationTicks = 900;
