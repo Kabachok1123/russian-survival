@@ -8,8 +8,8 @@ emergency option with deliberately awful consequences.
 
 There is no custom world type. Vanilla terrain, seeds, structures and progression
 remain intact. The mod adds its content through biome and structure hooks: villages
-are more frequent and may contain a banya, while the Nether gains the rare Siberian
-Inferno climate region alongside its vanilla biomes.
+are more frequent and may contain a banya, while all five ordinary Nether biomes
+become frozen without adding a separate biome or dimension.
 
 The goal is still to complete Minecraft and defeat the Ender Dragon. Every system
 is balanced around that journey: hazards slow exploration and preparation, while
@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.4.2.jar`.
+The installable release is written to `build/libs/russian-survival-1.5.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.4.2.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.5.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -68,8 +68,9 @@ environment.
 ## Worlds
 
 Create or open a world exactly as in vanilla Minecraft. No world preset or special
-`level-type` is required. Existing chunks remain untouched, but all newly generated
-Every Overworld biome keeps its vanilla registry ID, terrain and structures, but receives
+`level-type` is required. Existing chunks remain untouched, but new worldgen content
+appears in newly generated chunks. Every Overworld biome keeps its vanilla registry ID,
+terrain and structures, but receives
 a winter climate, snow, frozen water and a cold regional palette. New structures
 appear in new chunks, while climate colors and snowfall also work in existing
 ordinary worlds.
@@ -96,8 +97,8 @@ spectator players are exempt.
 
 ### Equipment and bears
 
-Each vanilla leather armor piece provides early insulation. Ushanka and Fur Coat
-provide substantially more but do not make water or storms harmless. Brown bears
+Each vanilla leather armor piece provides early insulation. Ushanka provides
+substantially more but does not make water or storms harmless. Brown bears
 spawn throughout varied Overworld biomes in groups of up to three and proactively
 hunt nearby players. Rare Frostback and Snowstalker variants turn encounters into
 recordable mini-events. Their search is bounded per player and capped by config.
@@ -120,11 +121,12 @@ can contain two to five bears, making woodland travel visibly more dangerous.
   bottle while carrying sugar and any leaves. It produces Hot Tea, emits steam and
   acts as a strong heat source for 90 seconds.
 
-### Siberian Inferno and Abandoned Banya
+### Frozen Nether and Abandoned Banya
 
-Siberian Inferno is a cold, blue-gray Nether biome mixed alongside the five vanilla
-Nether biomes. It contains Frozen Blackstone ore patches and original ambience.
-Cold is active there but nearby Nether heat sources are especially valuable.
+There is no separate custom Nether biome. The five vanilla Nether biomes retain
+their registry IDs, terrain, fortresses, bastions and normal progression while
+receiving frozen visuals and resources. Cold is active there, so nearby heat
+sources are especially valuable.
 
 The entire Nether now participates in the survival loop, with each route behaving
 differently:
@@ -134,31 +136,32 @@ differently:
 - **Nether Wastes:** steady cold and extra Frozen Blackstone deposits.
 - **Warped Forest:** lower cold plus Nether Permafrost, making it a useful route.
 - **Crimson Forest:** the warmest vanilla Nether biome and a natural rest stop.
-- **Siberian Inferno:** the harshest region, rich in Frozen Blackstone.
 
 Fire Resistance now also provides strong warmth in the Nether. Frozen Blackstone
 remains a building resource and cannot be converted into Obsidian; portals still
 require the normal Minecraft progression and resource routes.
 
 Visually, the Nether is now **Hell Freezing Over**: all five vanilla Nether biomes
-receive cold blue-gray fog, drifting snowflake ambience and dense veins of Nether
-Permafrost. Soul Sand Valleys become pale blizzards, Basalt Deltas turn steel-blue,
-Warped Forests gain deep cyan frost, and Crimson Forests keep a muted warm-red tone
-as the safer heat route. Lava remains bright and dangerous, creating a strong
-red-against-blue contrast instead of making every scene uniformly gray.
+receive cold blue-gray fog, drifting snowflake ambience, 24 large Permafrost
+placement attempts, 18 Packed Ice attempts and 5 rarer Blue Ice attempts per chunk.
+Rare solid Obsidian basins represent lava lakes that froze in place, while ordinary
+lava remains elsewhere for progression and a strong red-against-blue contrast.
 
-Abandoned Banya is a rare 7×7 jigsaw structure with a campfire, cauldron, samovar
-and a loot barrel. Its random-spread spacing is 42 chunks by default. Loot is kept
-modest: potatoes, fuel, ingredients, metal, rare tea and very rare Vodka.
+Abandoned Banya is a rare 7×7 sealed jigsaw structure with a real door, benches,
+full water cauldron, samovar, campfire, loot barrel and smoking chimney. It can
+appear throughout the five vanilla Nether biomes. Its random-spread spacing is 42
+chunks by default.
 
 Vanilla villages use closer spacing and can generate a compact working banya among
 their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
 Village bells are converted into functional Bear Bells when approached.
 
-The redesigned Village Banya is a conspicuous 9×9 spruce-log cabin with a stepped
-roof, tall smoking chimney, red banner, lantern, samovar, water cauldron, campfire,
-bed and loot barrel. Its village pool weight is high, and the same building also
-generates independently across the Overworld. Use
+The redesigned Village Banya is a sealed 9×9 spruce-log cabin with closed roof
+gables, exterior spruce leaves and a tall smoking chimney. A door separates the
+main room from a dedicated steam room with benches, a campfire and two full water
+cauldrons. Its barrel guarantees several potato stacks for brewing Potato Mash,
+with sugar, fuel, tea and very rare Vodka as secondary loot. Its village pool
+weight is high, and the same building also generates independently. Use
 `/locate structure russian_survival:village_banya` to find the standalone version.
 
 Bear Shrines are rare mossy-cobblestone and birch ruins found across the Overworld.
@@ -171,8 +174,6 @@ and oceans freeze beneath a cold blue-gray sky.
 ## Recipes
 
 - **Ushanka:** top row `Bear Fur ×3`; second row `Bear Fur, Leather, Bear Fur`.
-- **Fur Coat:** fur at both shoulders, a leather chestplate in the center, fur
-  around/below it.
 - **Potato Mash:** 3 potatoes + sugar + water potion/bottle, shapeless.
 - **Vodka:** smelt or smoke Potato Mash (300/150 ticks, 0.7 XP).
 - **Hot Tea:** water potion/bottle + sugar + any leaves, shapeless; the Samovar is
@@ -188,8 +189,8 @@ Files are created safely on first launch and rewritten with defaults if malforme
 
 - `config/russian_survival-server.json`: cold enable/start/gain, weather and water
   multipliers, heat radius/strength, damage interval, armor insulation, bear spawn
-  and aggression/cap, Vodka/Drunk/Hangover durations, Inferno enable flag, banya
-  spacing and daily snow chance.
+  and aggression/cap, Vodka/Drunk/Hangover durations, banya spacing and daily snow
+  chance.
 - `config/russian_survival-client.json`: HUD visibility and offsets, reduced nausea,
   camera rotation toggle, input inversion toggle, vignette intensity and ambience
   volume.
@@ -209,7 +210,6 @@ Commands require permission level 2 and are not part of survival progression:
 /give @s russian_survival:vodka_bottle
 /give @s russian_survival:hot_tea
 /give @s russian_survival:bear_bell
-/locate biome russian_survival:siberian_inferno
 /locate structure russian_survival:abandoned_banya
 /locate structure russian_survival:bear_shrine
 /weather rain 600
@@ -233,14 +233,13 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.4.2 release smoke test was performed with Java 21 and included:
+The 1.5.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
 - ordinary world creation with all vanilla biome IDs preserved and winterized;
 - successful locate of a vanilla stronghold (confirming progression);
-- successful locate of Siberian Inferno and Abandoned Banya;
-- successful load of Bear Shrine, birch-grove and expanded Nether worldgen data;
+- successful load of sealed banya templates and expanded frozen Nether worldgen;
 - graceful save of Overworld, Nether and End.
 
 ## Known limitations
@@ -248,8 +247,8 @@ The 1.4.2 release smoke test was performed with Java 21 and included:
 - The first dev-client run may spend several minutes downloading Mojang's asset
   index. On the test machine this external download did not finish within the
   bounded smoke-test window; compilation and dedicated-server resource loading did.
-- Ushanka uses a custom cuboid inventory/hand model; worn armor still uses the
-  stable vanilla leather armor renderer for maximum mod compatibility.
+- Ushanka uses a custom cuboid model when worn; its inventory sprite is a separate
+  readable 16×16 texture.
 - Banya spacing is registry data loaded before ordinary server config. The shipped
   value is 42 chunks; changing the JSON config field alone cannot rebuild an already
   loaded worldgen registry.

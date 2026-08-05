@@ -46,11 +46,6 @@ def item_textures():
         d.rectangle((5,2,10,4), fill="#a87849"); d.rectangle((5,7,10,9), fill="#bf9361"); stipple(d,(4,3,11,9),["#82502f","#4d291b"],.3)
     save_pixel("item/ushanka.png", ushanka)
 
-    def coat(d, _):
-        d.polygon([(5,2),(10,2),(13,6),(11,8),(10,6),(11,14),(4,14),(5,6),(3,8),(1,6)], fill="#704529")
-        d.line((7,3,7,14), fill="#c79a68"); d.rectangle((5,2,9,4), fill="#c79a68"); stipple(d,(4,5,10,13),["#8d613d","#52321f"],.25)
-    save_pixel("item/fur_coat.png", coat)
-
     def mash(d, _):
         d.rectangle((3,7,12,13), fill="#7c4f2a"); d.rectangle((4,6,11,11), fill="#d8bd74"); stipple(d,(4,6,11,11),["#f0d88d","#ad8c4f"],.35)
     save_pixel("item/potato_mash.png", mash)
@@ -130,7 +125,6 @@ def armor_and_hud():
         for x in range(0,40,4): d.point((x%32,(x*3)%31),fill=trim)
         path=TEX/f"models/armor/{name}"; path.parent.mkdir(parents=True,exist_ok=True); image.save(path)
     layer("ushanka_layer_1.png", "#6b4028", "#c09261")
-    layer("fur_coat_layer_1.png", "#75482c", "#c89c69")
     save_pixel("gui/snowflake.png", lambda d,i: (d.line((8,1,8,14),fill="#dff8ff"),d.line((1,8,14,8),fill="#dff8ff"),d.line((3,3,13,13),fill="#94ddeb"),d.line((13,3,3,13),fill="#94ddeb")))
 
     image = Image.new("RGBA", (64,32), "#3d2418"); d = ImageDraw.Draw(image)
@@ -226,8 +220,6 @@ def audio_assets():
     synth(SOUNDS/"item/bottle_clink.ogg",.45,lambda t,n,r:(math.sin(2*math.pi*930*t)+.6*math.sin(2*math.pi*1420*t))*.25*math.exp(-t*10))
     synth(SOUNDS/"block/samovar_boil.ogg",2.2,lambda t,n,r:(noise.random()*2-1)*.10+(.12*math.sin(2*math.pi*300*t) if n%1900<70 else 0))
     synth(SOUNDS/"block/samovar_whistle.ogg",1.4,lambda t,n,r:math.sin(2*math.pi*(920+25*math.sin(t*8))*t)*.22*math.sin(math.pi*t/1.4))
-    synth(SOUNDS/"ambient/inferno_1.ogg",4.0,lambda t,n,r:wind(t,n,r)*.8+math.sin(2*math.pi*42*t)*.06)
-    synth(SOUNDS/"ambient/inferno_2.ogg",4.4,lambda t,n,r:wind(t*.8,n,r)*.7+math.sin(2*math.pi*31*t)*.08)
 
 
 def nbt_string(value):
@@ -249,11 +241,11 @@ def banya_template():
             if props: parts.append(compound_tag('Properties',[string_tag(k,v) for k,v in sorted(props.items())]))
             index[key]=len(palette);palette.append(parts)
         return index[key]
-    blocks=[]
+    blocks={}
     def put(x,y,z,name,props=None,nbt=None):
         parts=[int_list('pos',[x,y,z]),int_tag('state',state(name,props))]
         if nbt: parts.append(compound_tag('nbt',nbt))
-        blocks.append(parts)
+        blocks[(x,y,z)]=parts
     for x in range(7):
         for z in range(7): put(x,0,z,'minecraft:dark_oak_planks')
     for y in range(1,4):
@@ -264,11 +256,20 @@ def banya_template():
             for x in (0,6): put(x,y,z,'minecraft:stripped_spruce_log',{'axis':'y'})
     for x in range(7):
         for z in range(7): put(x,4,z,'minecraft:dark_oak_planks')
+    put(3,1,0,'minecraft:dark_oak_door',{'facing':'north','half':'lower','hinge':'left','open':'false','powered':'false'})
+    put(3,2,0,'minecraft:dark_oak_door',{'facing':'north','half':'upper','hinge':'left','open':'false','powered':'false'})
     put(3,1,4,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'false','waterlogged':'false'})
-    put(2,1,4,'minecraft:cauldron')
+    put(2,1,4,'minecraft:water_cauldron',{'level':'3'})
     put(4,1,4,'minecraft:barrel',{'facing':'north','open':'false'},[string_tag('LootTable','russian_survival:chests/abandoned_banya')])
     put(1,1,1,'russian_survival:samovar',{'lit':'false','water':'true'})
-    root=[int_tag('DataVersion',3955),int_list('size',[7,5,7]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
+    put(1,1,3,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(1,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(5,1,3,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(5,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(3,4,4,'minecraft:cobblestone'); put(3,5,4,'minecraft:cobblestone')
+    put(3,6,4,'minecraft:hay_block',{'axis':'y'})
+    put(3,7,4,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'true','waterlogged':'false'})
+    root=[int_tag('DataVersion',3955),int_list('size',[7,8,7]),compound_list('palette',palette),compound_list('blocks',list(blocks.values())),compound_list('entities',[])]
     target=ROOT/'src/main/resources/data/russian_survival/structure/abandoned_banya.nbt'; target.parent.mkdir(parents=True,exist_ok=True)
     with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
 
@@ -282,11 +283,11 @@ def village_banya_template():
             if props: parts.append(compound_tag('Properties',[string_tag(k,v) for k,v in sorted(props.items())]))
             index[key]=len(palette);palette.append(parts)
         return index[key]
-    blocks=[]
+    blocks={}
     def put(x,y,z,name,props=None,nbt=None):
         parts=[int_list('pos',[x,y,z]),int_tag('state',state(name,props))]
         if nbt: parts.append(compound_tag('nbt',nbt))
-        blocks.append(parts)
+        blocks[(x,y,z)]=parts
     for x in range(9):
         for z in range(9): put(x,0,z,'minecraft:cobblestone' if (x+z)%4 else 'minecraft:mossy_cobblestone')
     for y in range(1,4):
@@ -297,6 +298,11 @@ def village_banya_template():
             for x in (1,7): put(x,y,z,'minecraft:spruce_planks')
     for x,z in ((1,1),(7,1),(1,7),(7,7)):
         for y in range(1,5): put(x,y,z,'minecraft:stripped_spruce_log',{'axis':'y'})
+    # Close both triangular gables; the old template left these rows open.
+    for z in (1,7):
+        for x in range(2,7):
+            put(x,4,z,'minecraft:spruce_planks')
+            put(x,5,z,'minecraft:spruce_planks')
     stair={'half':'bottom','shape':'straight','waterlogged':'false'}
     for z in range(9):
         put(0,4,z,'minecraft:spruce_stairs',{**stair,'facing':'east'}); put(8,4,z,'minecraft:spruce_stairs',{**stair,'facing':'west'})
@@ -308,19 +314,31 @@ def village_banya_template():
         string_tag('joint','rollable')])
     put(4,1,1,'minecraft:spruce_door',{'facing':'north','half':'lower','hinge':'left','open':'false','powered':'false'})
     put(4,2,1,'minecraft:spruce_door',{'facing':'north','half':'upper','hinge':'left','open':'false','powered':'false'})
+    # A separate steam room occupies the rear of the building.
+    for y in range(1,4):
+        for x in range(2,7):
+            if not (x == 4 and y < 3): put(x,y,4,'minecraft:spruce_planks')
+    put(4,1,4,'minecraft:spruce_door',{'facing':'north','half':'lower','hinge':'right','open':'false','powered':'false'})
+    put(4,2,4,'minecraft:spruce_door',{'facing':'north','half':'upper','hinge':'right','open':'false','powered':'false'})
     put(3,1,6,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'false','waterlogged':'false'})
     put(2,1,6,'minecraft:water_cauldron',{'level':'3'})
-    put(5,1,6,'minecraft:barrel',{'facing':'north','open':'false'},[
+    put(5,1,6,'minecraft:water_cauldron',{'level':'3'})
+    put(6,1,6,'minecraft:barrel',{'facing':'north','open':'false'},[
         string_tag('LootTable','russian_survival:chests/abandoned_banya')])
     put(2,1,2,'russian_survival:samovar',{'lit':'false','water':'true'})
     put(6,1,2,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'foot'})
     put(6,1,3,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'head'})
-    put(2,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'}); put(3,1,4,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
-    put(2,4,6,'minecraft:cobblestone'); put(2,5,6,'minecraft:cobblestone'); put(2,6,6,'minecraft:hay_block',{'axis':'y'})
-    put(2,7,6,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'true','waterlogged':'false'})
+    for x in (2,3,5,6): put(x,1,5,'minecraft:oak_slab',{'type':'bottom','waterlogged':'false'})
+    put(3,4,6,'minecraft:cobblestone'); put(3,5,6,'minecraft:cobblestone'); put(3,6,6,'minecraft:cobblestone')
+    put(3,7,6,'minecraft:hay_block',{'axis':'y'})
+    put(3,8,6,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'true','waterlogged':'false'})
+    leaves={'distance':'7','persistent':'true','waterlogged':'false'}
+    for x,z in ((0,2),(0,4),(0,6),(8,2),(8,4),(8,6),(2,8),(6,8)):
+        put(x,1,z,'minecraft:spruce_leaves',leaves)
+        if (x in (0,8) and z in (2,6)): put(x,2,z,'minecraft:spruce_leaves',leaves)
     put(2,2,1,'minecraft:red_wall_banner',{'facing':'north'})
     put(6,2,1,'minecraft:lantern',{'hanging':'true','waterlogged':'false'})
-    root=[int_tag('DataVersion',3955),int_list('size',[9,8,9]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
+    root=[int_tag('DataVersion',3955),int_list('size',[9,9,9]),compound_list('palette',palette),compound_list('blocks',list(blocks.values())),compound_list('entities',[])]
     target=ROOT/'src/main/resources/data/russian_survival/structure/village/banya.nbt'; target.parent.mkdir(parents=True,exist_ok=True)
     with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
 

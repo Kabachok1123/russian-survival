@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.0 — Frozen Vanilla Nether and Sealed Banya
+
+- Removed the Fur Coat item, recipe, textures and insulation setting.
+- Removed the separate Siberian Inferno biome; all frozen Nether content now uses
+  the five vanilla biome IDs, and the Russian Hell advancement triggers on entering
+  the Nether.
+- Doubled Nether Permafrost generation, added abundant Packed Ice, rarer Blue Ice
+  and occasional solid Obsidian basins representing frozen lava lakes.
+- Rebuilt the cold HUD as a segmented labeled meter with a severity-scaled icy
+  full-screen vignette and critical pulse.
+- Sealed the Village Banya roof gables, added a separate steam room, two full water
+  cauldrons, benches, spruce foliage and a taller smoking chimney.
+- Added a proper door, water, benches and chimney to the Abandoned Banya.
+- Made multiple stacks of potatoes guaranteed in banya barrels for Vodka brewing.
+
 ## 1.4.2 — Vanilla Obsidian Progression
 
 - Removed the Frozen Blackstone-to-Obsidian recipe. Obsidian once again requires

@@ -56,7 +56,6 @@ public final class ServerConfig {
         public int freezeDamageIntervalTicks = 40;
         public double leatherPieceInsulation = 0.08;
         public double ushankaInsulation = 0.33;
-        public double furCoatInsulation = 0.42;
         public int polarBearSpawnWeight = 38;
         public int polarBearAggressionRadius = 20;
         public int maxPolarBearsNearPlayer = 12;
@@ -64,7 +63,6 @@ public final class ServerConfig {
         public int vodkaPositiveAmplifier = 1;
         public int drunkDurationTicks = 900;
         public int hangoverDurationTicks = 1200;
-        public boolean enableSiberianInferno = true;
         public int abandonedBanyaSpacing = 42;
         public double snowChancePerDay = 0.45;
     }

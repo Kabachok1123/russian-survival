@@ -20,8 +20,6 @@ public final class ModSounds {
     public static final SoundEvent BOTTLE_CLINK = register("item.vodka.clink");
     public static final SoundEvent SAMOVAR_BOIL = register("block.samovar.boil");
     public static final SoundEvent SAMOVAR_WHISTLE = register("block.samovar.whistle");
-    public static final SoundEvent INFERNO_1 = register("ambient.inferno_1");
-    public static final SoundEvent INFERNO_2 = register("ambient.inferno_2");
 
     private static SoundEvent register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(RussianSurvival.MOD_ID, name);

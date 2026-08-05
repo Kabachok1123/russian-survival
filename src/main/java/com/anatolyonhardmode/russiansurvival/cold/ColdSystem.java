@@ -15,7 +15,6 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.level.ServerLevel;
@@ -36,10 +35,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.sounds.SoundSource;
 
 public final class ColdSystem {
-    private static final ResourceKey<Biome> SIBERIAN_INFERNO = ResourceKey.create(
-            net.minecraft.core.registries.Registries.BIOME,
-            ResourceLocation.fromNamespaceAndPath("russian_survival", "siberian_inferno"));
-
     public static void initialize() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if (server.getTickCount() % 20 != 0) return;
@@ -104,8 +99,7 @@ public final class ColdSystem {
         double gain = ServerConfig.values.baseColdGainPerSecond;
         Holder<Biome> biome = level.getBiome(pos);
         if (level.dimension() == Level.NETHER) {
-            if (biome.is(SIBERIAN_INFERNO)) gain *= 1.75;
-            else if (biome.is(Biomes.SOUL_SAND_VALLEY)) gain *= 1.45;
+            if (biome.is(Biomes.SOUL_SAND_VALLEY)) gain *= 1.45;
             else if (biome.is(Biomes.BASALT_DELTAS)) gain *= 1.15;
             else if (biome.is(Biomes.WARPED_FOREST)) gain *= 0.75;
             else if (biome.is(Biomes.CRIMSON_FOREST)) gain *= 0.35;
@@ -135,7 +129,6 @@ public final class ColdSystem {
         double insulation = 0;
         for (ItemStack stack : player.getArmorSlots()) {
             if (stack.is(ModItems.USHANKA)) insulation += ServerConfig.values.ushankaInsulation;
-            else if (stack.is(ModItems.FUR_COAT)) insulation += ServerConfig.values.furCoatInsulation;
             else if (stack.getItem() instanceof ArmorItem armor && armor.getMaterial() == net.minecraft.world.item.ArmorMaterials.LEATHER) insulation += ServerConfig.values.leatherPieceInsulation;
         }
         return Math.min(0.82, insulation);
