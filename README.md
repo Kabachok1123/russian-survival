@@ -1,16 +1,21 @@
 # Russian Survival
 
 Russian Survival is a server-authoritative Fabric mod for Minecraft Java 1.21.1.
-It turns a separate world preset into an endless snowy-taiga survival challenge
-without changing normal worlds: cold starts rising immediately, shelter and fire
-matter, polar bears hunt, warm clothing buys time, tea and borscht are safe heat,
-and Vodka is a powerful emergency option with deliberately awful consequences.
+Install it and continue playing any ordinary new or existing world: cold starts
+rising, shelter and fire matter, brown bears hunt across varied Overworld biomes,
+warm clothing buys time, tea and borscht are safe heat, and Vodka is a powerful
+emergency option with deliberately awful consequences.
 
-The normal Minecraft objective remains intact. The Russian Winter preset uses the
-vanilla Overworld noise generator, so caves, ores, mineshafts, strongholds and the
-End remain available. Its Nether retains all vanilla Nether biomes and adds a rare
-Siberian Inferno climate region; fortress and bastion biome tags include the new
-biome.
+There is no custom world type. Vanilla terrain, seeds, structures and progression
+remain intact. The mod adds its content through biome and structure hooks: villages
+are more frequent and may contain a banya, while the Nether gains the rare Siberian
+Inferno climate region alongside its vanilla biomes.
+
+The goal is still to complete Minecraft and defeat the Ender Dragon. Every system
+is balanced around that journey: hazards slow exploration and preparation, while
+the mod's food, gear, settlements and risky buffs can accelerate progression when
+used well. The final advancement, **From Russia With Blocks**, is awarded for
+defeating the dragon.
 
 ## Requirements
 
@@ -39,7 +44,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.0.0.jar`.
+The installable release is written to `build/libs/russian-survival-1.1.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -56,26 +61,17 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.0.0.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.1.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
 
-## Creating a Russian Winter world
+## Worlds
 
-In singleplayer choose **Create New World → World → World Type: Russian Winter**.
-The preset is added beside the vanilla presets and does not modify existing worlds.
-
-For a dedicated server, set these values before first start:
-
-```properties
-level-type=russian_survival:russian_winter
-generate-structures=true
-```
-
-Do not change `level-type` after generating a world. A standard `minecraft:normal`
-world is unaffected by the cold system; Russian Winter is detected from its fixed
-snowy-taiga biome source rather than from the presence of the mod alone.
+Create or open a world exactly as in vanilla Minecraft. No world preset or special
+`level-type` is required. Existing chunks remain untouched; new biome features and
+structures appear in newly generated chunks. The survival systems work immediately
+in both new and existing ordinary Overworlds.
 
 ## Mechanics
 
@@ -100,10 +96,11 @@ spectator players are exempt.
 ### Equipment and bears
 
 Each vanilla leather armor piece provides early insulation. Ushanka and Fur Coat
-provide substantially more but do not make water or storms harmless. Polar bears
-spawn in taiga/cold biomes and become proactive hunters only in Russian Winter.
-Their search is bounded per player and capped by config. Vanilla fish loot remains;
-an injected pool adds 0–2 Bear Fur.
+provide substantially more but do not make water or storms harmless. Brown bears
+spawn throughout varied Overworld biomes in groups of up to three and proactively
+hunt nearby players. Rare Frostback and Snowstalker variants turn encounters into
+recordable mini-events. Their search is bounded per player and capped by config.
+Vanilla fish loot remains; an injected pool adds 0–2 Bear Fur.
 
 ### Food, Vodka and Samovar
 
@@ -127,6 +124,9 @@ Abandoned Banya is a rare 7×7 jigsaw structure with a campfire, cauldron, samov
 and a loot barrel. Its random-spread spacing is 42 chunks by default. Loot is kept
 modest: potatoes, fuel, ingredients, metal, rare tea and very rare Vodka.
 
+Vanilla villages use closer spacing and can generate a compact working banya among
+their houses. Village chests also gain a small chance for Hot Tea and Bear Fur.
+
 ## Recipes
 
 - **Ushanka:** top row `Bear Fur ×3`; second row `Bear Fur, Leather, Bear Fur`.
@@ -138,6 +138,8 @@ modest: potatoes, fuel, ingredients, metal, rare tea and very rare Vodka.
   the immersive alternative.
 - **Borscht:** bowl + 2 beetroot + cooked beef + baked potato, shapeless.
 - **Samovar:** copper over a bucket, iron on both sides, campfire below.
+- **Bear Bell:** string over copper/iron; rings across 48 blocks, briefly outlines
+  nearby bears and provokes them into chasing the player. Designed for risky videos.
 
 ## Configuration
 
@@ -165,6 +167,7 @@ Commands require permission level 2 and are not part of survival progression:
 /give @s russian_survival:ushanka
 /give @s russian_survival:vodka_bottle
 /give @s russian_survival:hot_tea
+/give @s russian_survival:bear_bell
 /locate biome russian_survival:siberian_inferno
 /locate structure russian_survival:abandoned_banya
 /weather rain 600
@@ -188,11 +191,11 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.0.0 release smoke test was performed with Java 21 and included:
+The 1.1.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;
-- Russian Winter world generation and snowy-taiga biome at the test origin;
+- ordinary vanilla world generation with the survival systems active;
 - successful locate of a vanilla stronghold (confirming progression);
 - successful locate of Siberian Inferno and Abandoned Banya;
 - graceful save of Overworld, Nether and End.
@@ -202,10 +205,8 @@ The 1.0.0 release smoke test was performed with Java 21 and included:
 - The first dev-client run may spend several minutes downloading Mojang's asset
   index. On the test machine this external download did not finish within the
   bounded smoke-test window; compilation and dedicated-server resource loading did.
-- Ushanka and Fur Coat use the stable vanilla leather armor renderer for player
-  geometry in 1.21.1. Their inventory sprites are original, but wearable coloring
-  follows the leather material renderer; original layer source textures remain in
-  the asset tree for a future custom equipment-render layer.
+- Ushanka uses a custom cuboid inventory/hand model; worn armor still uses the
+  stable vanilla leather armor renderer for maximum mod compatibility.
 - Banya spacing is registry data loaded before ordinary server config. The shipped
   value is 42 chunks; changing the JSON config field alone cannot rebuild an already
   loaded worldgen registry.
@@ -214,6 +215,5 @@ The 1.0.0 release smoke test was performed with Java 21 and included:
 
 Source code is MIT licensed. Original PNG art and procedurally synthesized OGG audio
 are CC0-1.0; details are in `ASSET_LICENSES.md`. The generated sounds contain no
-third-party samples or music. The AI-assisted mod icon was generated specifically
-for this project and locally cleaned/resized. Minecraft assets are referenced by
-identifier only and are not redistributed.
+third-party samples or music. AI-assisted concept sheets for the new cuboid models
+are stored under `art/reference`; the shipped game models were authored as JSON.

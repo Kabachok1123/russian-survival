@@ -2,6 +2,6 @@
   "required": true,
   "package": "com.anatolyonhardmode.russiansurvival.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["PlayerDataMixin"],
+  "mixins": ["PlayerDataMixin", "StructureTemplatePoolAccessor"],
   "injectors": { "defaultRequire": 1 }
 }

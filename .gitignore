@@ -11,3 +11,5 @@ out/
 .settings/
 logs/
 tmp/
+__pycache__/
+*.pyc

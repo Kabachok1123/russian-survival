@@ -7,6 +7,7 @@ import random
 import struct
 import subprocess
 import wave
+import zipfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -100,6 +101,53 @@ def armor_and_hud():
     save_pixel("gui/snowflake.png", lambda d,i: (d.line((8,1,8,14),fill="#dff8ff"),d.line((1,8,14,8),fill="#dff8ff"),d.line((3,3,13,13),fill="#94ddeb"),d.line((13,3,3,13),fill="#94ddeb")))
 
 
+def effect_and_bear_textures():
+    def bear_bell(d, _):
+        d.rectangle((6, 1, 9, 3), fill="#7b4923")
+        d.polygon([(4, 3), (11, 3), (13, 11), (2, 11)], fill="#c88928", outline="#f2c45c")
+        d.rectangle((3, 10, 12, 12), fill="#8f531f")
+        d.rectangle((7, 12, 8, 14), fill="#e1a43a")
+        d.point((5, 5), fill="#ffe08a"); d.point((10, 7), fill="#9a5b20")
+    save_pixel("item/bear_bell.png", bear_bell)
+
+    def drunk(d, _):
+        d.ellipse((3, 2, 12, 13), fill="#8d4b86", outline="#d9a9d4")
+        d.rectangle((5, 5, 6, 6), fill="#f4e8d0"); d.rectangle((9, 5, 10, 6), fill="#f4e8d0")
+        d.arc((5, 7, 10, 11), 10, 170, fill="#47223f", width=1)
+        d.line((2, 4, 4, 5), fill="#d9a9d4"); d.line((12, 9, 14, 10), fill="#d9a9d4")
+    save_pixel("mob_effect/drunk.png", drunk)
+
+    def hangover(d, _):
+        d.ellipse((3, 2, 12, 13), fill="#646b4a", outline="#aeb58a")
+        d.rectangle((5, 5, 6, 6), fill="#2e3222"); d.rectangle((9, 5, 10, 6), fill="#2e3222")
+        d.arc((5, 9, 10, 12), 190, 350, fill="#d5d1af", width=1)
+        d.polygon([(11, 1), (13, 4), (10, 4)], fill="#9ad9e3")
+    save_pixel("mob_effect/hangover.png", hangover)
+
+    candidates = sorted((Path.home() / ".gradle/caches/fabric-loom").glob("**/minecraft-client.jar"))
+    if not candidates:
+        raise FileNotFoundError("Minecraft client jar not found; run Gradle once before generating the bear texture")
+    with zipfile.ZipFile(candidates[0]) as archive:
+        with archive.open("assets/minecraft/textures/entity/bear/polarbear.png") as source:
+            image = Image.open(source).convert("RGBA")
+            pixels = image.load()
+            for y in range(image.height):
+                for x in range(image.width):
+                    r, g, b, a = pixels[x, y]
+                    if a == 0:
+                        continue
+                    shade = (r + g + b) / (3 * 255)
+                    pixels[x, y] = (
+                        int(55 + 111 * shade),
+                        int(30 + 76 * shade),
+                        int(18 + 49 * shade),
+                        a,
+                    )
+            target = TEX / "entity/brown_bear.png"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            image.save(target)
+
+
 def synth(path: Path, duration: float, maker, rate=22050):
     path.parent.mkdir(parents=True, exist_ok=True)
     wav = path.with_suffix(".wav")
@@ -176,6 +224,48 @@ def banya_template():
     with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
 
 
+def village_banya_template():
+    palette=[]; index={}
+    def state(name,props=None):
+        key=(name,tuple(sorted((props or {}).items())))
+        if key not in index:
+            parts=[string_tag('Name',name)]
+            if props: parts.append(compound_tag('Properties',[string_tag(k,v) for k,v in sorted(props.items())]))
+            index[key]=len(palette);palette.append(parts)
+        return index[key]
+    blocks=[]
+    def put(x,y,z,name,props=None,nbt=None):
+        parts=[int_list('pos',[x,y,z]),int_tag('state',state(name,props))]
+        if nbt: parts.append(compound_tag('nbt',nbt))
+        blocks.append(parts)
+    for x in range(7):
+        for z in range(7): put(x,0,z,'minecraft:cobblestone')
+    for y in range(1,4):
+        for x in range(7):
+            for z in (0,6):
+                if not (z==0 and x==3 and y<3): put(x,y,z,'minecraft:spruce_planks')
+        for z in range(1,6):
+            for x in (0,6): put(x,y,z,'minecraft:spruce_planks')
+    for x in range(7):
+        for z in range(7): put(x,4,z,'minecraft:spruce_slab',{'type':'bottom','waterlogged':'false'})
+    for x,z in ((0,0),(6,0),(0,6),(6,6)):
+        for y in range(1,5): put(x,y,z,'minecraft:stripped_spruce_log',{'axis':'y'})
+    put(3,1,0,'minecraft:jigsaw',{'orientation':'north_up'},[
+        string_tag('name','minecraft:house'), string_tag('target','minecraft:street'),
+        string_tag('pool','minecraft:empty'), string_tag('final_state','minecraft:air'),
+        string_tag('joint','rollable')])
+    put(3,1,5,'minecraft:campfire',{'facing':'north','lit':'true','signal_fire':'false','waterlogged':'false'})
+    put(2,1,5,'minecraft:water_cauldron',{'level':'3'})
+    put(4,1,5,'minecraft:barrel',{'facing':'north','open':'false'},[
+        string_tag('LootTable','russian_survival:chests/abandoned_banya')])
+    put(1,1,2,'russian_survival:samovar',{'lit':'false','water':'true'})
+    put(5,1,2,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'foot'})
+    put(5,1,3,'minecraft:red_bed',{'facing':'south','occupied':'false','part':'head'})
+    root=[int_tag('DataVersion',3955),int_list('size',[7,5,7]),compound_list('palette',palette),compound_list('blocks',blocks),compound_list('entities',[])]
+    target=ROOT/'src/main/resources/data/russian_survival/structure/village/banya.nbt'; target.parent.mkdir(parents=True,exist_ok=True)
+    with gzip.open(target,'wb') as f: f.write(compound_tag('',root))
+
+
 def icon():
     source=ROOT/'tmp/imagegen/icon_alpha.png'
     target=ASSETS/'icon.png'; target.parent.mkdir(parents=True,exist_ok=True)
@@ -186,4 +276,4 @@ def icon():
 
 
 if __name__ == '__main__':
-    item_textures(); block_textures(); armor_and_hud(); audio_assets(); banya_template(); icon()
+    item_textures(); block_textures(); armor_and_hud(); effect_and_bear_textures(); audio_assets(); banya_template(); village_banya_template(); icon()

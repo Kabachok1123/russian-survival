@@ -1,5 +1,6 @@
 {
   "item.russian_survival.bear_fur":"Bear Fur",
+  "item.russian_survival.bear_bell":"Bear Bell",
   "item.russian_survival.ushanka":"Ushanka",
   "item.russian_survival.fur_coat":"Fur Coat",
   "item.russian_survival.potato_mash":"Potato Mash",
@@ -12,11 +13,10 @@
   "effect.russian_survival.drunk":"Drunk",
   "effect.russian_survival.hangover":"Hangover",
   "biome.russian_survival.siberian_inferno":"Siberian Inferno",
-  "generator.russian_survival.russian_winter":"Russian Winter",
   "subtitles.russian_survival.wind":"Freezing wind howls",
   "subtitles.russian_survival.teeth":"Teeth chatter",
   "subtitles.russian_survival.breath":"Cold breath",
-  "subtitles.russian_survival.bear_warning":"Polar bear growls",
+  "subtitles.russian_survival.bear_warning":"Brown bear growls",
   "subtitles.russian_survival.bear_step":"Heavy steps crunch snow",
   "subtitles.russian_survival.vodka_open":"Bottle opens",
   "subtitles.russian_survival.vodka_drink":"Vodka is gulped",
@@ -26,7 +26,7 @@
   "subtitles.russian_survival.samovar_whistle":"Samovar whistles",
   "subtitles.russian_survival.inferno":"A cold Nether wind moans",
   "advancements.russian_survival.root.title":"Russian Survival",
-  "advancements.russian_survival.root.description":"Winter has rules. Mostly unfair ones.",
+  "advancements.russian_survival.root.description":"Complete Minecraft despite a winter that fights back.",
   "advancements.russian_survival.welcome.title":"Welcome to Siberia",
   "advancements.russian_survival.welcome.description":"The cold has noticed you.",
   "advancements.russian_survival.ushanka.title":"Officially Warm",
@@ -42,5 +42,9 @@
   "advancements.russian_survival.hell.title":"Russian Hell",
   "advancements.russian_survival.hell.description":"Somehow the Nether got colder.",
   "advancements.russian_survival.dragon.title":"From Russia With Blocks",
-  "advancements.russian_survival.dragon.description":"Even the dragon could not stop winter."
+  "advancements.russian_survival.dragon.description":"You completed Minecraft. Even winter could not stop you.",
+  "advancements.russian_survival.bell.title":"Dinner Bell",
+  "advancements.russian_survival.bell.description":"Ring it. The bears will bring the content.",
+  "entity.russian_survival.frostback":"Frostback",
+  "entity.russian_survival.snowstalker":"Snowstalker"
 }

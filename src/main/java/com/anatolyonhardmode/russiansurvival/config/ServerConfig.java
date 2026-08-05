@@ -47,9 +47,9 @@ public final class ServerConfig {
         public double leatherPieceInsulation = 0.08;
         public double ushankaInsulation = 0.33;
         public double furCoatInsulation = 0.42;
-        public int polarBearSpawnWeight = 12;
-        public int polarBearAggressionRadius = 14;
-        public int maxPolarBearsNearPlayer = 5;
+        public int polarBearSpawnWeight = 22;
+        public int polarBearAggressionRadius = 18;
+        public int maxPolarBearsNearPlayer = 8;
         public int vodkaPositiveDurationTicks = 900;
         public int vodkaPositiveAmplifier = 1;
         public int drunkDurationTicks = 900;

@@ -30,7 +30,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -46,7 +45,7 @@ public final class ColdSystem {
             if (server.getTickCount() % 20 != 0) return;
             for (ServerPlayer player : server.getPlayerList().getPlayers()) tickPlayer(player);
             ServerLevel overworld = server.overworld();
-            if (isRussianWinter(overworld) && overworld.getGameTime() % 24000 == 0 && overworld.random.nextDouble() < ServerConfig.values.snowChancePerDay) {
+            if (overworld.getGameTime() % 24000 == 0 && overworld.random.nextDouble() < ServerConfig.values.snowChancePerDay) {
                 overworld.setWeatherParameters(0, 20 * 60 * (3 + overworld.random.nextInt(5)), true, overworld.random.nextInt(5) == 0);
             }
         });
@@ -95,19 +94,18 @@ public final class ColdSystem {
 
     private static boolean isColdBiome(ServerPlayer player) {
         Holder<Biome> biome = player.level().getBiome(player.blockPosition());
-        return player.level().dimension() == Level.OVERWORLD && isRussianWinter(player.serverLevel())
+        return player.level().dimension() == Level.OVERWORLD
                 || biome.is(SIBERIAN_INFERNO);
-    }
-
-    public static boolean isRussianWinter(ServerLevel level) {
-        return level.dimension() == Level.OVERWORLD && level.getChunkSource().getGenerator().getBiomeSource() instanceof FixedBiomeSource source
-                && source.possibleBiomes().stream().allMatch(biome -> biome.is(Biomes.SNOWY_TAIGA));
     }
 
     private static double calculateColdChange(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos pos = player.blockPosition();
         double gain = ServerConfig.values.baseColdGainPerSecond;
+        float biomeTemperature = level.getBiome(pos).value().getBaseTemperature();
+        if (biomeTemperature <= 0.2F) gain *= 1.35;
+        else if (biomeTemperature >= 1.5F) gain *= 0.35;
+        else if (biomeTemperature >= 0.9F) gain *= 0.7;
         boolean outside = level.canSeeSky(pos.above());
         if (!outside) gain *= 0.4;
         if (pos.getY() < level.getSeaLevel() - 25) gain -= 0.38;
@@ -177,15 +175,15 @@ public final class ColdSystem {
     private static boolean coldBiomeSound(ServerPlayer player) { return isColdBiome(player) && player.level().canSeeSky(player.blockPosition().above()); }
 
     private static void updateIntoxication(ServerPlayer player, PlayerSurvivalData data) {
-        int cooldown = data.russianSurvival$getIntoxicationCooldown();
-        if (cooldown > 0) data.russianSurvival$setIntoxicationCooldown(cooldown - 20);
-        if (cooldown > 0 && cooldown <= 20 && data.russianSurvival$getIntoxication() > 0) {
+        if (player.hasEffect(ModEffects.DRUNK)) return;
+        if (data.russianSurvival$getIntoxication() > 0) {
             int duration = ServerConfig.values.hangoverDurationTicks;
             player.addEffect(new MobEffectInstance(ModEffects.HANGOVER, duration, 0));
             player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, duration, 0));
             player.addEffect(new MobEffectInstance(MobEffects.HUNGER, duration, 0));
             player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, duration, 0));
             data.russianSurvival$setIntoxication(0);
+            data.russianSurvival$setIntoxicationCooldown(0);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.anatolyonhardmode.russiansurvival.bear;
 
 import com.anatolyonhardmode.russiansurvival.config.ServerConfig;
-import com.anatolyonhardmode.russiansurvival.cold.ColdSystem;
 import com.anatolyonhardmode.russiansurvival.registry.ModItems;
 import com.anatolyonhardmode.russiansurvival.sound.ModSounds;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -22,8 +21,8 @@ import net.minecraft.world.phys.AABB;
 
 public final class BearSystem {
     public static void initialize() {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SNOWY_TAIGA, Biomes.TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.SNOWY_PLAINS),
-                MobCategory.CREATURE, EntityType.POLAR_BEAR, ServerConfig.values.polarBearSpawnWeight, 1, 2);
+        BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
+                MobCategory.CREATURE, EntityType.POLAR_BEAR, ServerConfig.values.polarBearSpawnWeight, 1, 3);
         LootTableEvents.MODIFY.register((key, table, source, registries) -> {
             if (source.isBuiltin() && key.equals(EntityType.POLAR_BEAR.getDefaultLootTable())) {
                 table.pool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.BEAR_FUR)
@@ -31,12 +30,13 @@ public final class BearSystem {
             }
         });
         ServerTickEvents.END_WORLD_TICK.register(level -> {
-            if (level.getGameTime() % 20 != 0 || !ColdSystem.isRussianWinter(level)) return;
+            if (level.getGameTime() % 20 != 0 || level.dimension() != net.minecraft.world.level.Level.OVERWORLD) return;
             double radius = ServerConfig.values.polarBearAggressionRadius;
             for (Player player : level.players()) {
                 AABB box = player.getBoundingBox().inflate(radius);
                 int seen = 0;
                 for (PolarBear bear : level.getEntitiesOfClass(PolarBear.class, box, PolarBear::isAlive)) {
+                    initializeVariant(bear);
                     if (++seen > ServerConfig.values.maxPolarBearsNearPlayer) break;
                     if (bear.getTarget() == null && bear.hasLineOfSight(player)) {
                         bear.setTarget(player);
@@ -46,6 +46,22 @@ public final class BearSystem {
                 }
             }
         });
+    }
+
+    private static void initializeVariant(PolarBear bear) {
+        if (bear.getTags().contains("russian_survival:variant_ready")) return;
+        bear.addTag("russian_survival:variant_ready");
+        int roll = Math.floorMod(bear.getUUID().hashCode(), 20);
+        if (roll == 0) {
+            bear.addTag("russian_survival:frostback");
+            bear.setCustomName(net.minecraft.network.chat.Component.translatable("entity.russian_survival.frostback"));
+            bear.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(42.0);
+            bear.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).setBaseValue(7.0);
+            bear.setHealth(42.0F);
+        } else if (roll <= 3) {
+            bear.addTag("russian_survival:snowstalker");
+            bear.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).setBaseValue(0.32);
+        }
     }
     private BearSystem() {}
 }

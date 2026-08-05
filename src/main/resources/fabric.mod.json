@@ -5,7 +5,7 @@
   "name": "Russian Survival",
   "description": "A harsh, funny, vanilla-friendly winter survival challenge.",
   "authors": ["AnatolyOnHardMode"],
-  "contact": { "sources": "https://github.com/AnatolyOnHardMode/russian-survival" },
+  "contact": { "sources": "https://github.com/Kabachok1123/russian-survival" },
   "license": "MIT",
   "icon": "assets/russian_survival/icon.png",
   "environment": "*",

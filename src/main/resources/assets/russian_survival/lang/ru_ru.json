@@ -1,5 +1,6 @@
 {
   "item.russian_survival.bear_fur":"Медвежий мех",
+  "item.russian_survival.bear_bell":"Медвежий колокол",
   "item.russian_survival.ushanka":"Ушанка",
   "item.russian_survival.fur_coat":"Меховая шуба",
   "item.russian_survival.potato_mash":"Картофельная брага",
@@ -12,11 +13,10 @@
   "effect.russian_survival.drunk":"Опьянение",
   "effect.russian_survival.hangover":"Похмелье",
   "biome.russian_survival.siberian_inferno":"Сибирское пекло",
-  "generator.russian_survival.russian_winter":"Русская зима",
   "subtitles.russian_survival.wind":"Воет морозный ветер",
   "subtitles.russian_survival.teeth":"Стучат зубы",
   "subtitles.russian_survival.breath":"Дыхание на морозе",
-  "subtitles.russian_survival.bear_warning":"Белый медведь рычит",
+  "subtitles.russian_survival.bear_warning":"Бурый медведь рычит",
   "subtitles.russian_survival.bear_step":"Тяжёлые шаги хрустят по снегу",
   "subtitles.russian_survival.vodka_open":"Бутылка открывается",
   "subtitles.russian_survival.vodka_drink":"Водка выпита",
@@ -26,7 +26,7 @@
   "subtitles.russian_survival.samovar_whistle":"Самовар свистит",
   "subtitles.russian_survival.inferno":"Стонет холодный ветер Незера",
   "advancements.russian_survival.root.title":"Русское выживание",
-  "advancements.russian_survival.root.description":"У зимы свои правила. Обычно нечестные.",
+  "advancements.russian_survival.root.description":"Пройди Minecraft, несмотря на зиму, которая мешает каждому шагу.",
   "advancements.russian_survival.welcome.title":"Добро пожаловать в Сибирь",
   "advancements.russian_survival.welcome.description":"Мороз вас заметил.",
   "advancements.russian_survival.ushanka.title":"Официально тепло",
@@ -42,5 +42,9 @@
   "advancements.russian_survival.hell.title":"Русский ад",
   "advancements.russian_survival.hell.description":"Даже Незер умудрился замёрзнуть.",
   "advancements.russian_survival.dragon.title":"Из России с блоками",
-  "advancements.russian_survival.dragon.description":"Даже дракон не остановил зиму."
+  "advancements.russian_survival.dragon.description":"Minecraft пройден. Даже зима тебя не остановила.",
+  "advancements.russian_survival.bell.title":"Звонок к обеду",
+  "advancements.russian_survival.bell.description":"Позвони. Медведи сами принесут контент.",
+  "entity.russian_survival.frostback":"Морозный хребет",
+  "entity.russian_survival.snowstalker":"Снежный охотник"
 }
