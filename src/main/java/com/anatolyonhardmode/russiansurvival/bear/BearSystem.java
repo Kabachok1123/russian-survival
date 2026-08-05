@@ -23,6 +23,14 @@ public final class BearSystem {
     public static void initialize() {
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
                 MobCategory.CREATURE, EntityType.POLAR_BEAR, ServerConfig.values.polarBearSpawnWeight, 2, 4);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(
+                        Biomes.FOREST, Biomes.FLOWER_FOREST, Biomes.BIRCH_FOREST,
+                        Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.DARK_FOREST,
+                        Biomes.TAIGA, Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA,
+                        Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.WINDSWEPT_FOREST,
+                        Biomes.GROVE, Biomes.CHERRY_GROVE, Biomes.JUNGLE,
+                        Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE),
+                MobCategory.CREATURE, EntityType.POLAR_BEAR, 52, 2, 5);
         LootTableEvents.MODIFY.register((key, table, source, registries) -> {
             if (source.isBuiltin() && key.equals(EntityType.POLAR_BEAR.getDefaultLootTable())) {
                 table.pool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.BEAR_FUR)

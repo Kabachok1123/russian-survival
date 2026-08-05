@@ -180,6 +180,11 @@ public final class ColdSystem {
             player.serverLevel().playSound(null, player.blockPosition(), player.getRandom().nextBoolean() ? ModSounds.TEETH_1 : ModSounds.TEETH_2, SoundSource.PLAYERS, 0.45F, 0.95F + player.getRandom().nextFloat() * 0.1F);
         }
         if (cold >= 60 && player.getRandom().nextInt(14) == 0) player.playSound(ModSounds.BREATH, 0.35F, 1.0F);
+        if (player.level().dimension() == Level.NETHER) {
+            player.serverLevel().sendParticles(ParticleTypes.SNOWFLAKE,
+                    player.getX(), player.getY() + 1.5, player.getZ(),
+                    9, 5.0, 2.0, 5.0, 0.015);
+        }
         if (coldBiomeSound(player) && player.getRandom().nextInt(35) == 0) player.playSound(player.getRandom().nextBoolean() ? ModSounds.WIND_1 : ModSounds.WIND_2, 0.28F, 0.9F + player.getRandom().nextFloat() * 0.2F);
     }
 

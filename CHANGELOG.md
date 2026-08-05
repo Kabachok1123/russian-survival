@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.0 — Hell Freezing Over
+
+- Added high-weight brown-bear spawn pools to every vanilla forest family,
+  including birch forests, dark forests, taigas, groves and jungles; woodland
+  groups can now contain two to five bears.
+- Gave all five vanilla Nether biomes distinct frozen fog palettes while keeping
+  Crimson Forests visually warmer as the safer route.
+- Added drifting snowflake ambience around players throughout the Nether.
+- Spread Nether Permafrost through every vanilla Nether region and increased its
+  generation to twelve placement attempts per chunk.
+- Kept lava bright and dangerous as both a heat source and a strong red-blue visual
+  contrast for recording.
+
 ## 1.3.2 — Visible Village Banya
 
 - Rebuilt the village banya as a recognizable 9×9 spruce cabin with a stepped roof,

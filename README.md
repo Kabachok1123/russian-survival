@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.3.2.jar`.
+The installable release is written to `build/libs/russian-survival-1.4.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.3.2.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.4.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -103,6 +103,11 @@ hunt nearby players. Rare Frostback and Snowstalker variants turn encounters int
 recordable mini-events. Their search is bounded per player and capped by config.
 Vanilla fish loot remains; an injected pool adds 0–2 Bear Fur.
 
+Every vanilla forest family now has an additional high-weight bear spawn pool:
+oak, flower, birch, old-growth birch, dark, taiga, snowy and old-growth taiga,
+windswept forest, grove, cherry grove and all three jungle variants. Forest groups
+can contain two to five bears, making woodland travel visibly more dangerous.
+
 ### Food, Vodka and Samovar
 
 - Hot Tea removes 18 cold and grants Speed I for 15 seconds.
@@ -134,6 +139,13 @@ differently:
 Fire Resistance now also provides strong warmth in the Nether. Four Frozen
 Blackstone craft into one Obsidian, giving prepared explorers a way to repair a
 portal without removing the need to find a fortress and collect blaze rods.
+
+Visually, the Nether is now **Hell Freezing Over**: all five vanilla Nether biomes
+receive cold blue-gray fog, drifting snowflake ambience and dense veins of Nether
+Permafrost. Soul Sand Valleys become pale blizzards, Basalt Deltas turn steel-blue,
+Warped Forests gain deep cyan frost, and Crimson Forests keep a muted warm-red tone
+as the safer heat route. Lava remains bright and dangerous, creating a strong
+red-against-blue contrast instead of making every scene uniformly gray.
 
 Abandoned Banya is a rare 7×7 jigsaw structure with a campfire, cauldron, samovar
 and a loot barrel. Its random-spread spacing is 42 chunks by default. Loot is kept
@@ -222,7 +234,7 @@ The automated balance tests assert the 150–210 second calm opening and 90–13
 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.3.2 release smoke test was performed with Java 21 and included:
+The 1.4.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
 - dedicated Fabric server startup with no client-class crash;

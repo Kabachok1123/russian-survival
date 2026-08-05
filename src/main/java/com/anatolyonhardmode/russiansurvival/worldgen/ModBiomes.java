@@ -22,13 +22,16 @@ public final class ModBiomes {
 
     public static void initialize() {
         WinterWorldSystem.initialize();
+        NetherWinterSystem.initialize();
         if (ServerConfig.values.enableSiberianInferno) {
             NetherBiomes.addNetherBiome(SIBERIAN_INFERNO,
                     Climate.parameters(-0.85F, 0.65F, 0.0F, 0.0F, 0.0F, -0.25F, 0.0F));
         }
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.NETHER_WASTES, Biomes.BASALT_DELTAS),
                 GenerationStep.Decoration.UNDERGROUND_ORES, FROZEN_BLACKSTONE_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.SOUL_SAND_VALLEY, Biomes.WARPED_FOREST),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.NETHER_WASTES,
+                        Biomes.SOUL_SAND_VALLEY, Biomes.BASALT_DELTAS,
+                        Biomes.WARPED_FOREST, Biomes.CRIMSON_FOREST),
                 GenerationStep.Decoration.UNDERGROUND_ORES, NETHER_PERMAFROST_PATCH);
     }
 
