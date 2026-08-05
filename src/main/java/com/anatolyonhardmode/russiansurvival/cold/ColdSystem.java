@@ -89,6 +89,7 @@ public final class ColdSystem {
         }
 
         updateThresholdEffects(player, cold);
+        applyBlizzardWind(player);
         if (cold >= 40) award(player, "welcome_to_siberia", "cold_40");
         updateIntoxication(player, data);
         sync(player, data);
@@ -124,6 +125,31 @@ public final class ColdSystem {
         return level.getBlockState(pos).is(Blocks.POWDER_SNOW)
                 || level.getBlockState(pos.above()).is(Blocks.POWDER_SNOW)
                 || level.getBlockState(pos.below()).is(Blocks.POWDER_SNOW);
+    }
+
+    private static void applyBlizzardWind(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        BlockPos pos = player.blockPosition();
+        if (level.dimension() != Level.OVERWORLD || !level.isThundering()
+                || !level.canSeeSky(pos.above()) || player.isInWater()
+                || player.getRandom().nextDouble() >= ServerConfig.values.blizzardWindChancePerSecond) return;
+
+        // Keep the wind coherent for several seconds instead of changing direction every gust.
+        double time = level.getGameTime() / 20.0;
+        double direction = time / 13.0 + Math.sin(time / 5.0) * 0.35;
+        double strength = ServerConfig.values.blizzardWindStrength
+                * (0.75 + player.getRandom().nextDouble() * 0.5);
+        if (player.isCrouching()) strength *= 0.42;
+        player.push(Math.cos(direction) * strength, 0.025, Math.sin(direction) * strength);
+        player.hurtMarked = true;
+
+        level.sendParticles(ParticleTypes.SNOWFLAKE,
+                player.getX() - Math.cos(direction) * 4.0, player.getEyeY(), player.getZ() - Math.sin(direction) * 4.0,
+                24, 5.0, 2.0, 5.0, 0.12);
+        if (player.getRandom().nextInt(3) == 0) {
+            player.playSound(player.getRandom().nextBoolean() ? ModSounds.WIND_1 : ModSounds.WIND_2,
+                    0.8F, 0.78F + player.getRandom().nextFloat() * 0.16F);
+        }
     }
 
     private static double insulation(ServerPlayer player) {

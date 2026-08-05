@@ -32,6 +32,7 @@ public final class ServerConfig {
                 if (values.heatSourceStrength == 1.8) values.heatSourceStrength = 2.2;
                 values.configVersion = 3;
             }
+            if (values.configVersion < 4) values.configVersion = 4;
         } catch (Exception exception) {
             RussianSurvival.LOGGER.warn("Invalid server config; restoring safe defaults", exception);
             values = new Values();
@@ -49,7 +50,7 @@ public final class ServerConfig {
     }
 
     public static final class Values {
-        public int configVersion = 3;
+        public int configVersion = 4;
         public boolean enableColdSystem = true;
         public double startingCold = 20.0;
         public double baseColdGainPerSecond = 0.62;
@@ -72,6 +73,8 @@ public final class ServerConfig {
         public int hangoverDurationTicks = 1200;
         public int abandonedBanyaSpacing = 42;
         public double snowstormChancePerDay = 0.20;
+        public double blizzardWindChancePerSecond = 0.38;
+        public double blizzardWindStrength = 0.32;
     }
 
     private ServerConfig() {}

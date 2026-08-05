@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0 — Whiteout
+
+- Turned thunder snow into a full blizzard event with pulsing 15–20 block
+  visibility while preserving stronger vanilla Blindness, Darkness and fluid fog.
+- Added coherent, irregular wind gusts that physically push exposed players and
+  sweep extra snow particles across them.
+- Made roofs and water block the physical wind, while crouching reduces gust
+  strength by roughly 58%.
+- Added server config controls for gust frequency and strength.
+
 ## 1.5.2 — Torch Shelter
 
 - Changed nearby torches from ordinary heat sources into cold stabilizers: they

@@ -43,7 +43,7 @@ export JAVA_HOME=/path/to/jdk-21
 ./gradlew clean build
 ```
 
-The installable release is written to `build/libs/russian-survival-1.5.2.jar`.
+The installable release is written to `build/libs/russian-survival-1.6.0.jar`.
 The `*-sources.jar` is for development and should not be installed as the mod.
 
 Development runs:
@@ -60,7 +60,7 @@ environment.
 ## Installation
 
 1. Install Fabric Loader for Minecraft 1.21.1.
-2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.5.2.jar` in the instance's
+2. Put Fabric API 0.116.15+1.21.1 and `russian-survival-1.6.0.jar` in the instance's
    `mods` folder.
 3. Launch using Java 21.
 4. Client and server both need the mod and Fabric API for multiplayer.
@@ -100,6 +100,12 @@ Snow adds 2.8 cold per second before insulation and works alongside vanilla sink
 and freezing. Campfires and fire remove cold quickly. A torch within the heat radius
 stops ordinary cold gain but removes only 0.02 cold per second; it cannot neutralize
 Powder Snow immersion. Creative and spectator players are exempt.
+
+Thunder weather is a full blizzard event rather than only a cold multiplier. Visibility
+pulses between roughly 15 and 20 blocks, extra snow sweeps across exposed players and
+irregular coherent gusts push them sideways. A roof or other solid shelter completely
+blocks the physical wind; water also prevents it, and crouching reduces push strength
+by about 58%. Vanilla Blindness, Darkness, underwater and lava fog keep priority.
 
 ### Equipment and bears
 
@@ -193,7 +199,7 @@ Files are created safely on first launch and rewritten with defaults if malforme
 - `config/russian_survival-server.json`: cold enable/start/gain, weather and water
   multipliers, Powder Snow gain, Nether recovery, heat radius/strength, damage
   interval, armor insulation, bear spawn and aggression/cap, Vodka/Drunk/Hangover
-  durations, banya spacing and daily snowstorm chance.
+  durations, banya spacing, daily snowstorm chance, gust frequency and wind strength.
 - `config/russian_survival-client.json`: HUD visibility and offsets, reduced nausea,
   camera rotation toggle, input inversion toggle, vignette intensity and ambience
   volume.
@@ -215,7 +221,7 @@ Commands require permission level 2 and are not part of survival progression:
 /give @s russian_survival:bear_bell
 /locate structure russian_survival:abandoned_banya
 /locate structure russian_survival:bear_shrine
-/weather rain 600
+/weather thunder 600
 /summon minecraft:polar_bear ~ ~ ~
 /russiansurvival reload_config
 ```
@@ -236,9 +242,11 @@ The automated balance tests assert the 90–105 second constant-snow opening and
 70–80 second storm opening. The resource validator parses every JSON file, resolves all
 mod texture references and verifies every declared OGG stream.
 
-The 1.5.2 release smoke test was performed with Java 21 and included:
+The 1.6.0 release smoke test was performed with Java 21 and included:
 
 - full Gradle build and JUnit pass;
+- dev-client startup through sound and texture-atlas initialization with the
+  blizzard fog mixin enabled;
 - dedicated Fabric server startup with no client-class crash;
 - ordinary world creation with all vanilla biome IDs preserved and winterized;
 - successful locate of a vanilla stronghold (confirming progression);
